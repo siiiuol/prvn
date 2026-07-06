@@ -402,7 +402,10 @@ input[type=file]{display:none}
       <div style="font-family:'Bebas Neue';font-size:24px;letter-spacing:.08em;margin-bottom:8px">PLAN PENDING</div>
       <div style="font-size:13px;color:var(--t2);line-height:1.7">Thanks for completing your intake. Your coach is reviewing your answers and building your plan — you'll get access to your dashboard as soon as it's approved.</div>
     </div>
-    <button class="btn btn-g btn-sm" style="margin-top:16px" onclick="logout()">Sign out</button>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:16px">
+      <button class="btn btn-p btn-sm" onclick="checkPendingStatus(true)">Check status</button>
+      <button class="btn btn-g btn-sm" onclick="logout()">Sign out</button>
+    </div>
   </div>
 </div>
 
@@ -469,7 +472,21 @@ let currentUser=null, currentProfile=null, currentSub=null, currentIntake=null;
 let realClients=[], clientCheckIns={}, allIntakes=[], pendingIntakeCount=0;
 let role='coach', view='overview', actC=null, cTab=0, upT=null;
 let chks={}, habs={sleep:false,prot:false,steps:false,alc:false,routine:false};
-let hlog=Array(7).fill(0), msgSel=0, weekOffset=0;
+let hlog=Array(7).fill(0), msgSel=0, weekOffset=0, pendingTimer=null;
+
+async function checkPendingStatus(manual){
+  try{
+    const{data:intake}=await db.from('client_intakes').select('*').eq('user_id',currentUser.id).maybeSingle();
+    if(intake)currentIntake=intake;
+    if(intake&&intake.status==='approved'){
+      clearInterval(pendingTimer);
+      showApp('client');
+      toast('Your plan is live — welcome to PRVN');
+    }else if(manual){
+      toast('Still pending — your coach is reviewing');
+    }
+  }catch(e){if(manual)toast('Could not check — try again');}
+}
 
 const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -503,20 +520,25 @@ async function initApp(){
 
 async function onSignedIn(user){
   currentUser=user;
+  let profile=null,sub=null;
   try{
-    const{data:profile}=await db.from('profiles').select('*').eq('id',user.id).single();
-    const{data:sub}=await db.from('subscriptions').select('*').eq('user_id',user.id).single();
-    currentProfile=profile;currentSub=sub;
-    if(profile.role==='coach'){await fetchRealClients();await fetchIntakes();}
-    else{
-      if(user.user_metadata?.invite_code){
-        db.rpc('consume_invite_code',{p_code:user.user_metadata.invite_code}).catch(()=>{});
-      }
+    const pr=await db.from('profiles').select('*').eq('id',user.id).maybeSingle();profile=pr.data;
+    const sr=await db.from('subscriptions').select('*').eq('user_id',user.id).maybeSingle();sub=sr.data;
+  }catch(e){}
+  currentProfile=profile;currentSub=sub;
+  const r=profile?.role||'client';
+  if(r==='coach'){
+    try{await fetchRealClients();await fetchIntakes();}catch(e){}
+  }else{
+    try{
+      if(user.user_metadata?.invite_code){await db.rpc('consume_invite_code',{p_code:user.user_metadata.invite_code});}
+    }catch(e){}
+    try{
       const{data:intake}=await db.from('client_intakes').select('*').eq('user_id',user.id).maybeSingle();
       currentIntake=intake||null;
-    }
-    showApp(profile.role);
-  }catch(e){showApp('client');}
+    }catch(e){currentIntake=null;}
+  }
+  showApp(r);
 }
 
 function onSignedOut(){
@@ -583,6 +605,7 @@ async function logout(){
 
 function showApp(r){
   role=r||currentProfile?.role||'client';
+  clearInterval(pendingTimer);
   document.getElementById('auth-screen').classList.add('hidden');
   setTimeout(()=>document.getElementById('auth-screen').style.display='none',400);
 
@@ -599,6 +622,7 @@ function showApp(r){
       document.getElementById('pending-screen').style.display='flex';
       document.getElementById('nav').classList.remove('show');
       document.getElementById('app').classList.remove('show');
+      pendingTimer=setInterval(()=>checkPendingStatus(false),30000);
       return;
     }
   }
@@ -943,6 +967,8 @@ function intakeClientName(userId){
 
 async function vIntake(el){
   if(intakeDetailId){renderIntakeDetail(el);return;}
+  el.innerHTML=`<div class="loading"><span class="spinner"></span>Loading...</div>`;
+  await fetchRealClients();
   await fetchIntakes();
   const pending=allIntakes.filter(i=>i.status==='pending');
   const approved=allIntakes.filter(i=>i.status==='approved');
@@ -973,15 +999,98 @@ function intakeRow(label,value){
   return`<div class="pr"><div class="pr-n" style="max-width:60%">${label}</div><div class="pr-s" style="text-align:right;max-width:55%">${value}</div></div>`;
 }
 
+// ── PLAN RECOMMENDATION ALGORITHM ──
+function recommendPlan(i){
+  const days=Math.min(Math.max(parseInt(i.training_days)||3,2),6);
+  const exp=(i.experience||'').toLowerCase();
+  const goal=(i.goal||'').toLowerCase();
+  const subs=(i.substances||'').toLowerCase();
+  const al=(i.activity_level||'').toLowerCase();
+  const sleep=(i.sleep_quality||'').toLowerCase();
+  const notes=[];
+
+  const splits={2:'Full body × 2',3:'Full body × 3',4:'Upper / Lower × 2',5:'Push / Pull / Legs + Upper / Lower',6:'Push / Pull / Legs × 2'};
+  const split=splits[days];
+  const volume=exp.startsWith('beginner')?'Low–moderate — technique & linear progression first':exp.startsWith('advanced')?'High — specialization and periodization viable':'Moderate — progressive overload focus';
+
+  const w=Number(i.weight)||75,h=Number(i.height)||178,a=Number(i.age)||25;
+  const bmr=10*w+6.25*h-5*a+5;
+  let act=1.5;
+  if(al.startsWith('sedentary'))act=1.35;
+  else if(al.startsWith('lightly'))act=1.5;
+  else if(al.startsWith('very'))act=1.8;
+  else if(al.startsWith('active'))act=1.65;
+  let kcal=bmr*act;
+  if(goal.includes('bulk'))kcal*=1.10;
+  else if(goal.includes('cut')||goal.includes('fat'))kcal*=0.80;
+  else if(goal.includes('performance')||goal.includes('athletic'))kcal*=1.05;
+  kcal=Math.round(kcal/50)*50;
+
+  const saysNone=/^\s*(no|none|nee|geen|n\/a|nvt|-)\b/.test(subs);
+  const glp=!saysNone&&/(ozempic|retatrutide|semaglutide|tirzepatide|glp|wegovy|mounjaro|saxenda)/.test(subs);
+  const aas=!saysNone&&/(testosterone|\btrt\b|anabolic|steroid|sarm|tren\b|nandrolone|primobolan)/.test(subs);
+
+  const proteinPerKg=(glp||goal.includes('cut')||goal.includes('fat'))?2.2:2.0;
+  const proteinG=Math.round(proteinPerKg*w);
+  const fatG=Math.round(kcal*0.25/9);
+  const carbG=Math.max(Math.round((kcal-proteinG*4-fatG*9)/4),0);
+
+  if(glp)notes.push('GLP-1 medication reported — appetite will be suppressed. Prioritize protein at every meal, consider smaller/more frequent meals, and watch for muscle loss if in a deficit.');
+  if(aas)notes.push('Anabolic/TRT use reported — recovery capacity is elevated, so higher training volume is viable. Recommend monitoring blood pressure and bloodwork.');
+  if(i.injuries&&!/^\s*(no|none|nee|geen|n\/a|nvt|-)\b/i.test(i.injuries.trim()))notes.push('Injuries reported ("'+i.injuries+'") — adjust exercise selection around these before finalizing the plan.');
+  if(sleep==='poor')notes.push('Poor sleep — keep training volume conservative and address sleep as the first coaching priority.');
+  if((i.discipline_score||10)<=4)notes.push('Low discipline score ('+i.discipline_score+'/10) — keep the plan simple with few moving parts; complexity kills adherence here.');
+  notes.push('Energy estimate uses the male Mifflin-St Jeor formula — verify with the client, since gender isn\'t asked in the intake yet.');
+
+  return{split,volume,days,kcal,proteinG,carbG,fatG,notes};
+}
+
+// ── AI SUMMARY ──
+async function generateAISummary(id){
+  const box=document.getElementById('ai-sum-box');
+  if(!box)return;
+  box.innerHTML='<div class="loading" style="padding:16px"><span class="spinner"></span>Generating...</div>';
+  try{
+    const{data:{session}}=await db.auth.getSession();
+    const res=await fetch(SUPABASE_URL+'/functions/v1/intake-summary',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
+      body:JSON.stringify({intake_id:id})
+    });
+    const j=await res.json();
+    if(!j.summary)throw new Error(j.error||'No summary returned');
+    const it=allIntakes.find(x=>x.id===id);if(it)it.ai_summary=j.summary;
+    box.innerHTML=`<div style="font-size:12px;color:var(--t2);line-height:1.7;white-space:pre-wrap">${j.summary}</div>`;
+  }catch(e){
+    box.innerHTML=`<div style="font-size:12px;color:var(--r);line-height:1.6">Couldn't generate the summary. Make sure the ANTHROPIC_API_KEY secret is set in Supabase.</div><button class="btn btn-g btn-sm" style="margin-top:10px" onclick="generateAISummary('${id}')">Retry</button>`;
+  }
+}
+
 function renderIntakeDetail(el){
   const i=allIntakes.find(x=>x.id===intakeDetailId);
   if(!i){el.innerHTML=`<div class="loading"><span class="spinner"></span>Loading...</div>`;return;}
+  const rec=recommendPlan(i);
   el.innerHTML=`
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
       <button class="btn btn-g btn-sm" onclick="intakeDetailId=null;go('intake')">${ico('arr')} Back</button>
     </div>
     <div class="ph"><div><div class="pt">${intakeClientName(i.user_id).toUpperCase()}</div><div class="ps">Submitted ${new Date(i.created_at).toLocaleDateString('en-GB',{month:'short',day:'numeric',year:'numeric'})}</div></div>
       <span class="tag ${i.status==='approved'?'tg':'to'}">${i.status==='approved'?'Approved':'Pending'}</span>
+    </div>
+    <div class="pgrid">
+      <div class="card"><div class="ch">AI summary</div>
+        <div id="ai-sum-box">${i.ai_summary?`<div style="font-size:12px;color:var(--t2);line-height:1.7;white-space:pre-wrap">${i.ai_summary}</div>`:`<div style="font-size:12px;color:var(--t3);line-height:1.6">No summary generated yet.</div><button class="btn btn-p btn-sm" style="margin-top:10px" onclick="generateAISummary('${i.id}')">Generate AI summary</button>`}</div>
+      </div>
+      <div class="card"><div class="ch">Recommended plan (auto)</div>
+        <div class="mgrid" style="margin-bottom:12px">
+          <div class="mb"><div class="mv" style="color:var(--a)">${rec.kcal.toLocaleString()}</div><div class="ml">Kcal</div></div>
+          <div class="mb"><div class="mv" style="color:var(--bl)">${rec.proteinG}g</div><div class="ml">Protein</div></div>
+          <div class="mb"><div class="mv" style="color:var(--o)">${rec.carbG}g</div><div class="ml">Carbs</div></div>
+          <div class="mb"><div class="mv" style="color:var(--p)">${rec.fatG}g</div><div class="ml">Fat</div></div>
+        </div>
+        ${intakeRow('Split',rec.split)}${intakeRow('Days/week',rec.days)}${intakeRow('Volume',rec.volume)}
+        ${rec.notes.map(n=>`<div class="ci-note" style="margin-top:6px">${n}</div>`).join('')}
+      </div>
     </div>
     <div class="pgrid">
       <div class="card"><div class="ch">Personal &amp; health</div>
