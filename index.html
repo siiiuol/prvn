@@ -472,7 +472,7 @@ let currentUser=null, currentProfile=null, currentSub=null, currentIntake=null;
 let realClients=[], clientCheckIns={}, allIntakes=[], pendingIntakeCount=0;
 let role='coach', view='overview', actC=null, cTab=0, upT=null;
 let chks={}, habs={sleep:false,prot:false,steps:false,alc:false,routine:false};
-let hlog=Array(7).fill(0), msgSel=0, weekOffset=0, pendingTimer=null;
+let hlog=Array(7).fill(0), msgSel=0, weekOffset=0, pendingTimer=null, msgTimer=null, coachProfile=null;
 
 async function checkPendingStatus(manual){
   try{
@@ -495,7 +495,6 @@ const SP={0:'Push',2:'Pull',4:'Legs'};
 const EX={Push:['Bench Press','Incline DB Press','Lateral Raise','Tricep Pushdown'],Pull:['Deadlift','Pull-ups','Cable Row','Face Pull'],Legs:['Back Squat','Romanian Deadlift','Leg Press','Calf Raise']};
 const EXD={'Bench Press':'4 × 6–10 · 3 min','Incline DB Press':'3 × 10–12 · 90s','Lateral Raise':'4 × 15–20 · 60s','Tricep Pushdown':'3 × 12–15 · 60s','Deadlift':'4 × 4–6 · 3 min','Pull-ups':'4 × 8–12 · 2 min','Cable Row':'3 × 12–15 · 90s','Face Pull':'3 × 15–20 · 60s','Back Squat':'4 × 6–10 · 3 min','Romanian Deadlift':'3 × 10–12 · 2 min','Leg Press':'3 × 12–15 · 2 min','Calf Raise':'4 × 15–20 · 60s'};
 const MEALS=[{n:'Breakfast',f:'Oats 100g · Whole milk 250ml · Protein shake 30g',k:620},{n:'Lunch',f:'Chicken 200g · Rice 200g · Broccoli 150g',k:750},{n:'Post-workout',f:'Protein shake 40g · Banana 120g',k:280},{n:'Dinner',f:'Salmon 200g · Potatoes 250g · Spinazie 150g',k:820}];
-const MSGS=[{from:'client',t:'Hit a new PR on bench today',time:'10:23'},{from:'coach',t:"That's what I'm talking about. What weight?",time:'10:45'},{from:'client',t:'100kg for 3 reps. First time.',time:'10:46'},{from:'coach',t:'Aim for 5 reps next week. Eat your carbs before.',time:'11:02'}];
 
 // ── AUTH UI ──
 function showTab(t){
@@ -547,8 +546,9 @@ function onSignedOut(){
 }
 
 async function fetchRealClients(){
-  const{data}=await db.from('profiles').select('*, subscriptions(*)').eq('role','client').order('created_at',{ascending:false});
-  realClients=data||[];
+  const{data:profs}=await db.from('profiles').select('*').eq('role','client').order('created_at',{ascending:false});
+  const{data:subs}=await db.from('subscriptions').select('*');
+  realClients=(profs||[]).map(p=>({...p,subscriptions:(subs||[]).filter(s=>s.user_id===p.id)}));
 }
 
 async function fetchIntakes(){
@@ -674,7 +674,7 @@ async function saveWorkoutLog(workoutType, exercises){
 }
 
 // ── ROUTING ──
-function go(v){view=v;actC=null;buildNav();buildSB();render();}
+function go(v){view=v;actC=null;clearInterval(msgTimer);buildNav();buildSB();render();}
 function openC(id){actC=id;cTab=0;view='client';buildNav();buildSB();render();}
 
 // ── NAV ──
@@ -744,7 +744,9 @@ function cCards(){
     </div>`).join('');
 }
 
-function vOv(el){
+async function vOv(el){
+  el.innerHTML=`<div class="loading"><span class="spinner"></span>Loading...</div>`;
+  await fetchRealClients();
   const totalRev=realClients.filter(c=>c.subscriptions?.[0]?.price>0).reduce((a,c)=>a+(c.subscriptions?.[0]?.price||0),0);
   el.innerHTML=`
     <div class="ph"><div><div class="pt">OVERVIEW</div><div class="ps">Welcome back, ${currentProfile?.full_name?.split(' ')[0]||'Coach'}</div></div><button class="btn btn-p" onclick="go('clients')">${ico('plus')} New client</button></div>
@@ -757,7 +759,10 @@ function vOv(el){
     <div class="slbl">Clients</div>
     <div class="cgrid">${cCards()}</div>`;}
 
-function vCl(el){el.innerHTML=`<div class="ph"><div><div class="pt">CLIENTS</div><div class="ps">${realClients.length} registered clients</div></div></div><div class="cgrid">${cCards()}</div>`;}
+async function vCl(el){
+  el.innerHTML=`<div class="loading"><span class="spinner"></span>Loading...</div>`;
+  await fetchRealClients();
+  el.innerHTML=`<div class="ph"><div><div class="pt">CLIENTS</div><div class="ps">${realClients.length} registered clients</div></div></div><div class="cgrid">${cCards()}</div>`;}
 
 function vC(el){
   const c=realClients.find(x=>x.id===actC);
@@ -841,40 +846,92 @@ async function rCP(c){
         ${MEALS.map(m=>`<div class="pr"><div><div class="pr-n">${m.n}</div><div class="pr-s">${m.f}</div></div><span style="font-family:'Bebas Neue';font-size:15px;color:var(--a)">${m.k}</span></div>`).join('')}
       </div>
     </div>`;
-  }else if(cTab===3){buildChat(p,c,false);}
+  }else if(cTab===3){p.style.height='420px';p.style.display='flex';buildChat(p,c.id,c.full_name||'Client',false);}
 }
 
-function vMsg(el){
+async function vMsg(el){
+  el.innerHTML=`<div class="ph"><div><div class="pt">MESSAGES</div></div></div><div class="loading"><span class="spinner"></span>Loading...</div>`;
+  await fetchRealClients();
+  const{data:msgs}=await db.from('messages').select('*').order('created_at',{ascending:false}).limit(500);
+  const all=msgs||[];
   el.innerHTML=`<div class="ph"><div><div class="pt">MESSAGES</div></div></div><div class="msgw" id="msgw"></div>`;
   const w=document.getElementById('msgw');
   if(realClients.length>0){
+    if(msgSel>=realClients.length)msgSel=0;
     const list=document.createElement('div');list.className='msgl';
-    list.innerHTML=realClients.map((c,i)=>`<div class="msgi ${msgSel===i?'active':''}" onclick="msgSel=${i};vMsg(document.getElementById('v-messages'))">
+    list.innerHTML=realClients.map((c,i)=>{
+      const last=all.find(m=>m.sender_id===c.id||m.receiver_id===c.id);
+      const unread=all.filter(m=>m.sender_id===c.id&&m.receiver_id===currentUser.id&&!m.read).length;
+      return`<div class="msgi ${msgSel===i?'active':''}" onclick="msgSel=${i};vMsg(document.getElementById('v-messages'))">
       <div class="msga"><span style="font-family:'Bebas Neue';font-size:8px">${clientInitials(c.full_name)}</span></div>
-      <div style="min-width:0"><div class="msgn">${(c.full_name||'Client').split(' ')[0]}</div><div class="msgprev">Start a conversation...</div></div>
-    </div>`).join('');
+      <div style="min-width:0;overflow:hidden"><div class="msgn">${escapeHtml((c.full_name||'Client').split(' ')[0])}</div><div class="msgprev" style="white-space:nowrap;text-overflow:ellipsis;overflow:hidden">${last?escapeHtml(last.content.slice(0,26)):'Start a conversation...'}</div></div>
+      ${unread>0?'<div class="msgdot"></div>':''}
+    </div>`;}).join('');
     w.appendChild(list);
-    buildChat(w,realClients[msgSel]||realClients[0],true);
+    const sel=realClients[msgSel];
+    buildChat(w,sel.id,sel.full_name||'Client',true);
   }else{
     w.innerHTML=`<div class="empty-state" style="flex:1">${ico('msg',28)}<h3>No clients yet</h3><p>Messages will appear here when clients join.</p></div>`;
   }
 }
 
-function buildChat(container,c,withHdr){
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+async function getCoachId(){
+  if(currentProfile?.role==='coach')return currentUser.id;
+  if(coachProfile)return coachProfile.id;
+  const{data}=await db.from('profiles').select('id,full_name').eq('role','coach').limit(1).maybeSingle();
+  coachProfile=data||null;
+  return coachProfile?.id||null;
+}
+
+async function fetchConversation(otherId){
+  const{data}=await db.from('messages').select('*')
+    .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${otherId}),and(sender_id.eq.${otherId},receiver_id.eq.${currentUser.id})`)
+    .order('created_at',{ascending:true}).limit(200);
+  return data||[];
+}
+
+function buildChat(container,otherId,displayName,withHdr){
+  clearInterval(msgTimer);
   const chat=document.createElement('div');chat.className='msgc';
-  const displayName=c?.full_name||c?.name||'Chat';
   const ini=clientInitials(displayName);
-  if(withHdr)chat.innerHTML=`<div class="msgch"><div style="width:26px;height:26px;border-radius:6px;background:var(--ad);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue';font-size:9px;color:var(--a)">${ini}</div>${displayName}</div>`;
+  if(withHdr)chat.innerHTML=`<div class="msgch"><div style="width:26px;height:26px;border-radius:6px;background:var(--ad);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue';font-size:9px;color:var(--a)">${ini}</div>${escapeHtml(displayName)}</div>`;
   const body=document.createElement('div');body.className='msgb';
-  body.innerHTML=MSGS.map(m=>`<div class="bw ${m.from}"><div class="bbl ${m.from}">${m.t}</div><div class="btm">${m.time}</div></div>`).join('');
+  body.innerHTML=`<div class="loading"><span class="spinner"></span>Loading...</div>`;
   chat.appendChild(body);
   const row=document.createElement('div');row.className='msgrow';
   const inp=document.createElement('input');inp.className='msgin';inp.placeholder='Type a message…';
   const send=document.createElement('button');send.className='msgsend';send.innerHTML=ico('send',11);
-  const doSend=()=>{if(!inp.value.trim())return;const bw=document.createElement('div');bw.className='bw coach';bw.innerHTML=`<div class="bbl coach">${inp.value}</div><div class="btm">Now</div>`;body.appendChild(bw);inp.value='';body.scrollTop=body.scrollHeight;};
+  let lastCount=-1;
+  async function loadConv(){
+    const msgs=await fetchConversation(otherId);
+    if(msgs.length===lastCount)return;
+    lastCount=msgs.length;
+    if(msgs.length===0){
+      body.innerHTML=`<div class="empty-state" style="margin:auto">${ico('msg',24)}<h3>No messages yet</h3><p>Send the first message below.</p></div>`;
+    }else{
+      body.innerHTML=msgs.map(m=>{
+        const mine=m.sender_id===currentUser.id;
+        const t=new Date(m.created_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+        return`<div class="bw ${mine?'coach':'client'}"><div class="bbl ${mine?'coach':'client'}">${escapeHtml(m.content)}</div><div class="btm">${t}</div></div>`;
+      }).join('');
+      body.scrollTop=body.scrollHeight;
+    }
+    db.from('messages').update({read:true}).eq('receiver_id',currentUser.id).eq('sender_id',otherId).eq('read',false).then(()=>{},()=>{});
+  }
+  const doSend=async()=>{
+    const txt=inp.value.trim();if(!txt)return;
+    inp.value='';send.disabled=true;
+    const{error}=await db.from('messages').insert({sender_id:currentUser.id,receiver_id:otherId,content:txt});
+    send.disabled=false;
+    if(error){toast('Message failed — try again');inp.value=txt;return;}
+    lastCount=-1;await loadConv();
+  };
   send.onclick=doSend;inp.onkeydown=e=>{if(e.key==='Enter')doSend();};
   row.appendChild(inp);row.appendChild(send);chat.appendChild(row);container.appendChild(chat);
-  setTimeout(()=>body.scrollTop=body.scrollHeight,50);
+  loadConv();
+  msgTimer=setInterval(loadConv,8000);
 }
 
 function vAn(el){
@@ -1414,9 +1471,16 @@ function vHb(el){
       <button class="btn btn-p" style="width:100%;margin-top:14px;justify-content:center" onclick="toast('Habits saved')">Save</button>
     </div>`;}
 
-function vMM(el){
-  el.innerHTML=`<div class="ph"><div><div class="pt">MESSAGES</div><div class="ps">Your coach</div></div></div><div style="height:500px;display:flex"></div>`;
-  buildChat(el.querySelector('div:last-child'),{full_name:currentProfile?.full_name||'You'},true);}
+async function vMM(el){
+  el.innerHTML=`<div class="ph"><div><div class="pt">MESSAGES</div><div class="ps">Your coach</div></div></div><div style="height:500px;display:flex" id="mm-chat"></div>`;
+  const container=document.getElementById('mm-chat');
+  const coachId=await getCoachId();
+  if(!coachId){
+    container.innerHTML=`<div class="empty-state" style="flex:1">${ico('msg',28)}<h3>No coach found</h3><p>Your coach will appear here once connected.</p></div>`;
+    return;
+  }
+  buildChat(container,coachId,coachProfile?.full_name||'Coach',true);
+}
 
 function vSub(el){
   const plan=currentSub?.plan||'free';const price=currentSub?.price||0;
