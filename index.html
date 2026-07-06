@@ -13,10 +13,11 @@
   --bg:#050505;--s1:#0A0A0A;--s2:#0F0F0F;--s3:#141414;--s4:#1A1A1A;--s5:#202020;
   --b1:#1C1C1C;--b2:#272727;--b3:#323232;
   --t1:#EFEFEF;--t2:#767676;--t3:#404040;
-  --a:#D4F53C;--a2:#BCDB28;--ad:rgba(212,245,60,.08);--ad2:rgba(212,245,60,.14);
-  --r:#EF4444;--rd:rgba(239,68,68,.1);--g:#22C55E;--gd:rgba(34,197,94,.1);
-  --bl:#3B82F6;--bld:rgba(59,130,246,.1);--o:#F97316;--od:rgba(249,115,22,.1);
-  --p:#A855F7;--pd:rgba(168,85,247,.1);
+  --a:#FFFFFF;--a2:#D9D9D9;--ad:rgba(255,255,255,.08);--ad2:rgba(255,255,255,.14);
+  --r:#EF4444;--rd:rgba(239,68,68,.1);--g:#FFFFFF;--gd:rgba(255,255,255,.10);
+  --bl:#C9C9C9;--bld:rgba(201,201,201,.12);--o:#8F8F8F;--od:rgba(143,143,143,.14);
+  --p:#5C5C5C;--pd:rgba(255,255,255,.06);
+  --ease:cubic-bezier(.22,1,.36,1);
   --fd:'Bebas Neue',sans-serif;--fb:'DM Sans',sans-serif;--nav:54px;--sb:216px;
 }
 html,body{height:100%;overflow:hidden}
@@ -41,9 +42,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;o
 .auth-input.no-icon{padding-left:14px}
 .role-toggle{display:flex;gap:8px;margin-bottom:10px}
 .role-btn{flex:1;padding:10px;border-radius:8px;border:1px solid var(--b2);background:var(--s2);color:var(--t2);font-family:var(--fb);font-size:12px;font-weight:600;cursor:pointer;transition:.15s;text-align:center;letter-spacing:.04em}
-.role-btn.active-coach{background:var(--pd);border-color:var(--p);color:var(--p)}
-.role-btn.active-client{background:var(--bld);border-color:var(--bl);color:var(--bl)}
-.auth-btn{width:100%;padding:13px;background:var(--a);color:var(--bg);border:none;border-radius:9px;font-family:var(--fb);font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;transition:.15s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px}
+.role-btn.active-coach{background:var(--a);border-color:var(--a);color:var(--bg)}
+.role-btn.active-client{background:transparent;border-color:var(--t1);color:var(--t1)}
+.auth-btn{width:100%;padding:13px;background:var(--a);color:var(--bg);border:none;border-radius:9px;font-family:var(--fb);font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.1em;text-transform:uppercase;transition:all .15s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px}
 .auth-btn:hover{background:var(--a2);transform:translateY(-1px)}
 .auth-btn:disabled{opacity:.5;cursor:default;transform:none}
 .auth-err{font-size:12px;text-align:center;margin-top:10px;min-height:16px;letter-spacing:.01em}
@@ -103,8 +104,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;o
 .ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:12px}
 .pt{font-family:var(--fd);font-size:34px;letter-spacing:.1em;line-height:1}
 .ps{color:var(--t2);font-size:12px;margin-top:5px}
-.btn{padding:8px 16px;border-radius:7px;border:none;cursor:pointer;font-family:var(--fb);font-size:11px;font-weight:700;transition:all .15s;letter-spacing:.06em;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px}
-.btn-p{background:var(--a);color:var(--bg)}.btn-p:hover{background:var(--a2);transform:translateY(-1px)}
+.btn{padding:8px 16px;border-radius:7px;border:none;cursor:pointer;font-family:var(--fb);font-size:11px;font-weight:700;transition:all .18s var(--ease);letter-spacing:.06em;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px}
+.btn:active{transform:scale(.96)}
+.btn-p{background:var(--a);color:var(--bg)}.btn-p:hover{background:var(--a2);transform:translateY(-1px);box-shadow:0 8px 20px rgba(255,255,255,.08)}
 .btn-g{background:transparent;color:var(--t2);border:1px solid var(--b2)}.btn-g:hover{border-color:var(--b3);color:var(--t1)}
 .btn-d{background:var(--rd);color:var(--r);border:1px solid rgba(239,68,68,.2)}
 .btn-sm{padding:5px 11px;font-size:10px}
@@ -113,7 +115,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;o
 .card{background:var(--s1);border:1px solid var(--b1);border-radius:11px;padding:18px;position:relative;overflow:hidden}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent)}
 .tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;display:inline-block;letter-spacing:.05em;text-transform:uppercase}
-.ta{background:var(--ad);color:var(--a)}.tr{background:var(--rd);color:var(--r)}.tg{background:var(--gd);color:var(--g)}.tb{background:var(--bld);color:var(--bl)}.to{background:var(--od);color:var(--o)}.tp{background:var(--pd);color:var(--p)}.tx{background:var(--s4);color:var(--t3)}
+.ta{background:var(--ad);color:var(--a)}.tr{background:var(--rd);color:var(--r)}.tg{background:var(--gd);color:var(--t1)}.tb{background:var(--bld);color:var(--t2)}.to{background:var(--s4);color:var(--t2);border:1px solid var(--b2)}.tp{background:transparent;color:var(--t1);border:1px solid var(--b3)}.tx{background:var(--s4);color:var(--t3)}
 .ch{font-family:var(--fd);font-size:18px;letter-spacing:.06em;margin-bottom:13px}
 .empty-state{text-align:center;padding:48px 20px;color:var(--t3)}
 .empty-state svg{opacity:.2;margin-bottom:12px}
@@ -125,7 +127,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;o
 
 /* ── STATS ── */
 .srow{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:26px}
-.sc{background:var(--s1);border:1px solid var(--b1);border-radius:11px;padding:18px 20px;position:relative;overflow:hidden}
+.sc{background:var(--s1);border:1px solid var(--b1);border-radius:11px;padding:18px 20px;position:relative;overflow:hidden;transition:transform .22s var(--ease),border-color .2s}
+.sc:hover{transform:translateY(-2px);border-color:var(--b2)}
 .sc::after{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,var(--a),transparent);opacity:.22}
 .sv{font-family:var(--fd);font-size:30px;letter-spacing:.04em;line-height:1;margin-bottom:5px}
 .sl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.12em;font-weight:700}
@@ -142,9 +145,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;o
 
 /* ── CLIENT CARDS ── */
 .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
-.cc{background:var(--s1);border:1px solid var(--b1);border-radius:11px;padding:16px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.cc{background:var(--s1);border:1px solid var(--b1);border-radius:11px;padding:16px;cursor:pointer;transition:all .25s var(--ease);position:relative;overflow:hidden}
 .cc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent)}
-.cc:hover{border-color:var(--b2);transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.cc:hover{border-color:var(--b3);transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.04)}
 .cc-ph{width:44px;height:44px;border-radius:9px;background:var(--s3);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:14px;letter-spacing:.04em;color:var(--a);margin-bottom:12px;overflow:hidden;border:1px solid var(--b2);flex-shrink:0}
 .cc-ph img{width:100%;height:100%;object-fit:cover}
 .cc-n{font-size:13px;font-weight:700;margin-bottom:3px}.cc-m{color:var(--t2);font-size:11px;margin-bottom:10px}
@@ -176,8 +179,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;o
 .cal-nav-btn:hover{border-color:var(--b3);color:var(--t1)}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
 .cal-day{background:var(--s1);border:1px solid var(--b1);border-radius:10px;padding:14px 11px;min-height:210px;display:flex;flex-direction:column;position:relative;transition:.15s}
-.cal-day.training{background:rgba(212,245,60,.02);border-color:rgba(212,245,60,.15)}
-.cal-day.today{border-color:var(--a);box-shadow:0 0 0 1px rgba(212,245,60,.15)}
+.cal-day.training{background:rgba(255,255,255,.02);border-color:rgba(255,255,255,.12)}
+.cal-day.today{border-color:var(--a);box-shadow:0 0 0 1px rgba(255,255,255,.15)}
 .cal-day.today::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--a);border-radius:10px 10px 0 0}
 .cal-day.past{opacity:.45}.cal-day.rest{opacity:.65}
 .cal-dn{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:3px}
@@ -226,9 +229,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;o
 .hbr{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--b1)}
 .hbr:last-child{border-bottom:none}
 .hbn{font-size:13px;font-weight:600}.hbs{font-size:11px;color:var(--t2);margin-top:2px}
-.htg{width:38px;height:20px;border-radius:10px;background:var(--s4);border:1px solid var(--b2);cursor:pointer;position:relative;transition:.2s;flex-shrink:0}
+.htg{width:38px;height:20px;border-radius:10px;background:var(--s4);border:1px solid var(--b2);cursor:pointer;position:relative;transition:.22s var(--ease);flex-shrink:0}
 .htg.on{background:var(--a);border-color:var(--a)}
-.htg::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--t2);transition:.2s}
+.htg::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--t2);transition:.22s var(--ease)}
 .htg.on::after{left:20px;background:#fff}
 
 /* ── MESSAGES ── */
@@ -289,8 +292,8 @@ canvas{display:block;width:100%!important}
 .exr{display:flex;align-items:flex-start;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--b1)}
 .exr:last-child{border-bottom:none}
 .exn{font-size:13px;font-weight:600}.exd{font-size:11px;color:var(--t2);margin-top:2px}
-.chk{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--b2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0;color:transparent}
-.chk:hover:not(.done){border-color:var(--a)}.chk.done{background:var(--a);border-color:var(--a);color:var(--bg);font-size:11px;font-weight:700}
+.chk{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--b2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s var(--ease);flex-shrink:0;color:transparent}
+.chk:hover:not(.done){border-color:var(--a)}.chk:active{transform:scale(.88)}.chk.done{background:var(--a);border-color:var(--a);color:var(--bg);font-size:11px;font-weight:700}
 .cnote{background:var(--s1);border:1px solid var(--b1);border-left:1.5px solid var(--a);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--t2);line-height:1.7;font-style:italic}
 
 /* ── PHOTOS ── */
@@ -358,12 +361,9 @@ input[type=file]{display:none}
 
     <!-- SIGNUP FORM -->
     <div id="form-signup" style="display:none">
-      <div style="margin-bottom:12px">
-        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);margin-bottom:8px">I am a</div>
-        <div class="role-toggle">
-          <button class="role-btn" id="role-client" onclick="setSignupRole('client')">Client</button>
-          <button class="role-btn" id="role-coach" onclick="setSignupRole('coach')">Coach</button>
-        </div>
+      <div class="auth-field">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+        <input class="auth-input" id="sg-code" type="text" placeholder="Invite code" style="text-transform:uppercase" autocapitalize="characters">
       </div>
       <div class="auth-field">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -379,12 +379,30 @@ input[type=file]{display:none}
       </div>
       <button class="auth-btn" id="sg-btn" onclick="doSignUp()">Create free account</button>
       <div class="auth-err" id="sg-err"></div>
-      <div class="plan-badge">
-        <div class="plan-badge-title">Your plan</div>
-        <div class="plan-badge-price">€0<span style="font-size:16px;color:var(--t2)">/month</span></div>
-        <div class="plan-badge-desc">Free forever · No credit card required</div>
-      </div>
     </div>
+  </div>
+</div>
+
+<!-- INTAKE WIZARD -->
+<div class="auth-screen" id="intake-screen" style="display:none">
+  <div class="auth-logo">PRVN<div class="auth-dot"></div></div>
+  <div class="auth-sub">Client Intake</div>
+  <div id="intake-card" style="width:460px;max-width:92vw"></div>
+</div>
+
+<!-- PENDING APPROVAL -->
+<div class="auth-screen" id="pending-screen" style="display:none">
+  <div class="auth-logo">PRVN<div class="auth-dot"></div></div>
+  <div class="auth-sub">Client Intake</div>
+  <div style="width:380px;max-width:90vw;text-align:center">
+    <div class="card" style="padding:28px 24px">
+      <div style="width:52px;height:52px;border-radius:50%;background:var(--ad);border:1px solid var(--ad2);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--a)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div style="font-family:'Bebas Neue';font-size:24px;letter-spacing:.08em;margin-bottom:8px">PLAN PENDING</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.7">Thanks for completing your intake. Your coach is reviewing your answers and building your plan — you'll get access to your dashboard as soon as it's approved.</div>
+    </div>
+    <button class="btn btn-g btn-sm" style="margin-top:16px" onclick="logout()">Sign out</button>
   </div>
 </div>
 
@@ -447,11 +465,11 @@ const IC={
 function ico(n,s=14){return`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${IC[n]||''}</svg>`;}
 
 // ── APP STATE ──
-let currentUser=null, currentProfile=null, currentSub=null;
-let realClients=[], clientCheckIns={};
+let currentUser=null, currentProfile=null, currentSub=null, currentIntake=null;
+let realClients=[], clientCheckIns={}, allIntakes=[], pendingIntakeCount=0;
 let role='coach', view='overview', actC=null, cTab=0, upT=null;
 let chks={}, habs={sleep:false,prot:false,steps:false,alc:false,routine:false};
-let hlog=Array(7).fill(0), msgSel=0, weekOffset=0, signupRole='client';
+let hlog=Array(7).fill(0), msgSel=0, weekOffset=0;
 
 const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -472,12 +490,6 @@ function showTab(t){
   document.getElementById('sg-err').textContent='';
 }
 
-function setSignupRole(r){
-  signupRole=r;
-  document.getElementById('role-client').className='role-btn'+(r==='client'?' active-client':'');
-  document.getElementById('role-coach').className='role-btn'+(r==='coach'?' active-coach':'');
-}
-
 // ── SUPABASE AUTH ──
 async function initApp(){
   const {data:{session}}=await db.auth.getSession();
@@ -495,7 +507,14 @@ async function onSignedIn(user){
     const{data:profile}=await db.from('profiles').select('*').eq('id',user.id).single();
     const{data:sub}=await db.from('subscriptions').select('*').eq('user_id',user.id).single();
     currentProfile=profile;currentSub=sub;
-    if(profile.role==='coach'){await fetchRealClients();}
+    if(profile.role==='coach'){await fetchRealClients();await fetchIntakes();}
+    else{
+      if(user.user_metadata?.invite_code){
+        db.rpc('consume_invite_code',{p_code:user.user_metadata.invite_code}).catch(()=>{});
+      }
+      const{data:intake}=await db.from('client_intakes').select('*').eq('user_id',user.id).maybeSingle();
+      currentIntake=intake||null;
+    }
     showApp(profile.role);
   }catch(e){showApp('client');}
 }
@@ -510,19 +529,36 @@ async function fetchRealClients(){
   realClients=data||[];
 }
 
+async function fetchIntakes(){
+  const{data}=await db.from('client_intakes').select('*').order('created_at',{ascending:false});
+  allIntakes=data||[];
+  pendingIntakeCount=allIntakes.filter(i=>i.status==='pending').length;
+}
+
 async function doSignUp(){
+  const code=document.getElementById('sg-code').value.trim().toUpperCase();
   const name=document.getElementById('sg-name').value.trim();
   const email=document.getElementById('sg-email').value.trim().toLowerCase();
   const pw=document.getElementById('sg-pw').value;
   const errEl=document.getElementById('sg-err');
   const btn=document.getElementById('sg-btn');
+  if(!code){errEl.textContent='Please enter your invite code.';errEl.className='auth-err error';return;}
   if(!name){errEl.textContent='Please enter your name.';errEl.className='auth-err error';return;}
   if(!email){errEl.textContent='Please enter your email.';errEl.className='auth-err error';return;}
   if(pw.length<6){errEl.textContent='Password must be at least 6 characters.';errEl.className='auth-err error';return;}
-  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Creating account...';
-  const{data,error}=await db.auth.signUp({email,password:pw,options:{data:{full_name:name,role:signupRole}}});
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Checking invite code...';
+  const{data:codeValid,error:codeErr}=await db.rpc('validate_invite_code',{p_code:code});
+  if(codeErr||!codeValid){
+    btn.disabled=false;btn.innerHTML='Create free account';
+    errEl.textContent='That invite code is invalid or already used.';errEl.className='auth-err error';return;
+  }
+  btn.innerHTML='<span class="spinner"></span>Creating account...';
+  const{data,error}=await db.auth.signUp({email,password:pw,options:{data:{full_name:name,role:'client',invite_code:code}}});
   btn.disabled=false;btn.innerHTML='Create free account';
   if(error){errEl.textContent=error.message;errEl.className='auth-err error';return;}
+  if(data.session){
+    db.rpc('consume_invite_code',{p_code:code}).catch(()=>{});
+  }
   if(data.user&&!data.session){
     errEl.textContent='Account created! Check your email to confirm your account.';
     errEl.className='auth-err success';
@@ -547,9 +583,28 @@ async function logout(){
 
 function showApp(r){
   role=r||currentProfile?.role||'client';
-  view=role==='coach'?'overview':'today';
   document.getElementById('auth-screen').classList.add('hidden');
   setTimeout(()=>document.getElementById('auth-screen').style.display='none',400);
+
+  if(role==='client'){
+    if(!currentIntake){
+      document.getElementById('intake-screen').style.display='flex';
+      document.getElementById('pending-screen').style.display='none';
+      document.getElementById('nav').classList.remove('show');
+      document.getElementById('app').classList.remove('show');
+      intakeStep=0;intakeData={};renderIntakeStep();
+      return;
+    }else if(currentIntake.status!=='approved'){
+      document.getElementById('intake-screen').style.display='none';
+      document.getElementById('pending-screen').style.display='flex';
+      document.getElementById('nav').classList.remove('show');
+      document.getElementById('app').classList.remove('show');
+      return;
+    }
+  }
+  document.getElementById('intake-screen').style.display='none';
+  document.getElementById('pending-screen').style.display='none';
+  view=role==='coach'?'overview':'today';
   document.getElementById('nav').classList.add('show');
   document.getElementById('app').classList.add('show');
   const name=currentProfile?.full_name||currentUser?.email||'User';
@@ -562,9 +617,10 @@ function showApp(r){
 function hideApp(){
   document.getElementById('auth-screen').style.display='flex';
   document.getElementById('auth-screen').classList.remove('hidden');
+  document.getElementById('intake-screen').style.display='none';
+  document.getElementById('pending-screen').style.display='none';
   document.getElementById('nav').classList.remove('show');
   document.getElementById('app').classList.remove('show');
-  setSignupRole('client');
 }
 
 // ── DATA FUNCTIONS ──
@@ -599,7 +655,7 @@ function openC(id){actC=id;cTab=0;view='client';buildNav();buildSB();render();}
 
 // ── NAV ──
 function buildNav(){
-  const ct=[{v:'overview',l:'Overview'},{v:'clients',l:'Clients'},{v:'messages',l:'Messages'},{v:'analytics',l:'Analytics'},{v:'billing',l:'Billing'}];
+  const ct=[{v:'overview',l:'Overview'},{v:'clients',l:'Clients'},{v:'intake',l:'Intake'},{v:'invites',l:'Invites'},{v:'messages',l:'Messages'},{v:'analytics',l:'Analytics'},{v:'billing',l:'Billing'}];
   const cl=[{v:'today',l:'Today'},{v:'calendar',l:'Calendar'},{v:'myplan',l:'Plan'},{v:'log',l:'Log'},{v:'myprog',l:'Progress'},{v:'checkin',l:'Check-in'},{v:'habits',l:'Habits'},{v:'mymsg',l:'Messages'},{v:'subscription',l:'Subscription'}];
   document.getElementById('nav-tabs').innerHTML=(role==='coach'?ct:cl).map(t=>`<button class="ntab ${view===t.v||view==='client'&&t.v==='clients'?'active':''}" onclick="go('${t.v}')">${t.l}</button>`).join('');
 }
@@ -621,6 +677,8 @@ function buildSB(){
       <div class="sb-div"></div>
       <div class="sb-sec">
         <div class="sb-lbl">Business</div>
+        <button class="sb-item ${view==='intake'?'active':''}" onclick="go('intake')"><span class="sb-ic">${ico('clip')}</span>Intake${pendingIntakeCount>0?` <span class="sb-flag" style="margin-left:auto;background:var(--a)"></span>`:''}</button>
+        <button class="sb-item ${view==='invites'?'active':''}" onclick="go('invites')"><span class="sb-ic">${ico('gift')}</span>Invites</button>
         <button class="sb-item ${view==='analytics'?'active':''}" onclick="go('analytics')"><span class="sb-ic">${ico('bar')}</span>Analytics</button>
         <button class="sb-item ${view==='billing'?'active':''}" onclick="go('billing')"><span class="sb-ic">${ico('card')}</span>Billing</button>
         <button class="sb-item ${view==='messages'?'active':''}" onclick="go('messages')"><span class="sb-ic">${ico('msg')}</span>Messages</button>
@@ -634,9 +692,9 @@ function buildSB(){
 // ── RENDER ──
 function render(){
   const m=document.getElementById('main');
-  const vs=['overview','clients','client','messages','analytics','billing','today','calendar','myplan','log','myprog','checkin','habits','mymsg','subscription'];
+  const vs=['overview','clients','client','intake','invites','messages','analytics','billing','today','calendar','myplan','log','myprog','checkin','habits','mymsg','subscription'];
   vs.forEach(v=>{let el=document.getElementById('v-'+v);if(!el){el=document.createElement('div');el.id='v-'+v;el.className='view';m.appendChild(el);}el.classList.toggle('active',v===view);});
-  const fn={overview:vOv,clients:vCl,client:vC,messages:vMsg,analytics:vAn,billing:vBi,today:vTo,calendar:vCal,myplan:vMP,log:vLg,myprog:vPr,checkin:vCi,habits:vHb,mymsg:vMM,subscription:vSub};
+  const fn={overview:vOv,clients:vCl,client:vC,intake:vIntake,invites:vInv,messages:vMsg,analytics:vAn,billing:vBi,today:vTo,calendar:vCal,myplan:vMP,log:vLg,myprog:vPr,checkin:vCi,habits:vHb,mymsg:vMM,subscription:vSub};
   const el=document.getElementById('v-'+view);if(el&&fn[view])fn[view](el);
 }
 
@@ -831,6 +889,132 @@ function vBi(el){
       Set up Stripe, create a product at €100–400/month, and add the payment link to your coach dashboard. Update each client's subscription price manually or via Stripe webhooks.
     </div>`;}
 
+// ── INVITES ──
+function randCode(len=8){
+  const chars='ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  let s='';for(let i=0;i<len;i++)s+=chars[Math.floor(Math.random()*chars.length)];
+  return s;
+}
+
+async function generateInviteCode(){
+  const code=randCode();
+  const{error}=await db.from('invite_codes').insert({code,created_by:currentUser.id});
+  if(error){toast('Error creating code — please try again');return;}
+  toast(`Invite code created: ${code}`);
+  vInv(document.getElementById('v-invites'));
+}
+
+async function copyInviteCode(code){
+  try{await navigator.clipboard.writeText(code);toast('Code copied ✓');}
+  catch(e){toast(code);}
+}
+
+async function vInv(el){
+  el.innerHTML=`
+    <div class="ph"><div><div class="pt">INVITES</div><div class="ps">Codes clients use to join PRVN</div></div><button class="btn btn-p btn-sm" onclick="generateInviteCode()">${ico('plus',11)} Generate code</button></div>
+    <div id="inv-list"><div class="loading"><span class="spinner"></span>Loading...</div></div>`;
+  const{data}=await db.from('invite_codes').select('*').order('created_at',{ascending:false});
+  const list=data||[];
+  const listEl=document.getElementById('inv-list');if(!listEl)return;
+  if(list.length===0){
+    listEl.innerHTML=`<div class="empty-state">${ico('gift',28)}<h3>No invite codes yet</h3><p>Generate a code above and send it to a new client — they'll need it to create an account.</p></div>`;
+    return;
+  }
+  listEl.innerHTML=`<div class="card">${list.map(c=>`
+    <div class="pr">
+      <div>
+        <div class="pr-n" style="font-family:'Bebas Neue';letter-spacing:.1em;font-size:16px">${c.code}</div>
+        <div class="pr-s">Created ${new Date(c.created_at).toLocaleDateString('en-GB',{month:'short',day:'numeric'})}${c.used_at?' · Used '+new Date(c.used_at).toLocaleDateString('en-GB',{month:'short',day:'numeric'}):''}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="tag ${c.used_by?'tx':'tg'}">${c.used_by?'Used':'Available'}</span>
+        ${c.used_by?'':`<button class="btn btn-g btn-sm" onclick="copyInviteCode('${c.code}')">Copy</button>`}
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+// ── INTAKE (COACH) ──
+let intakeDetailId=null;
+
+function intakeClientName(userId){
+  const c=realClients.find(x=>x.id===userId);
+  return c?.full_name||'Unknown client';
+}
+
+async function vIntake(el){
+  if(intakeDetailId){renderIntakeDetail(el);return;}
+  await fetchIntakes();
+  const pending=allIntakes.filter(i=>i.status==='pending');
+  const approved=allIntakes.filter(i=>i.status==='approved');
+  el.innerHTML=`
+    <div class="ph"><div><div class="pt">INTAKE</div><div class="ps">Review new clients before activating their plan</div></div></div>
+    <div class="slbl">Pending review (${pending.length})</div>
+    <div class="cgrid" style="margin-bottom:26px">${pending.length===0?`<div class="empty-state" style="grid-column:1/-1">${ico('clip',28)}<h3>Nothing to review</h3><p>New client intakes will show up here.</p></div>`:
+      pending.map(i=>`<div class="cc" onclick="intakeDetailId='${i.id}';go('intake')">
+        <div class="cc-st"><span class="tag to">Pending</span></div>
+        <div class="cc-ph"><span style="font-family:'Bebas Neue';font-size:14px;color:var(--a)">${clientInitials(intakeClientName(i.user_id))}</span></div>
+        <div class="cc-n">${intakeClientName(i.user_id)}</div>
+        <div class="cc-m">Submitted ${new Date(i.created_at).toLocaleDateString('en-GB',{month:'short',day:'numeric'})}</div>
+      </div>`).join('')}
+    </div>
+    <div class="slbl">Approved (${approved.length})</div>
+    <div class="cgrid">${approved.length===0?`<div class="empty-state" style="grid-column:1/-1"><p>No approved intakes yet.</p></div>`:
+      approved.map(i=>`<div class="cc" onclick="intakeDetailId='${i.id}';go('intake')">
+        <div class="cc-st"><span class="tag tg">Approved</span></div>
+        <div class="cc-ph"><span style="font-family:'Bebas Neue';font-size:14px;color:var(--a)">${clientInitials(intakeClientName(i.user_id))}</span></div>
+        <div class="cc-n">${intakeClientName(i.user_id)}</div>
+        <div class="cc-m">Activated ${i.approved_at?new Date(i.approved_at).toLocaleDateString('en-GB',{month:'short',day:'numeric'}):''}</div>
+      </div>`).join('')}
+    </div>`;
+}
+
+function intakeRow(label,value){
+  if(value===null||value===undefined||value==='')return'';
+  return`<div class="pr"><div class="pr-n" style="max-width:60%">${label}</div><div class="pr-s" style="text-align:right;max-width:55%">${value}</div></div>`;
+}
+
+function renderIntakeDetail(el){
+  const i=allIntakes.find(x=>x.id===intakeDetailId);
+  if(!i){el.innerHTML=`<div class="loading"><span class="spinner"></span>Loading...</div>`;return;}
+  el.innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+      <button class="btn btn-g btn-sm" onclick="intakeDetailId=null;go('intake')">${ico('arr')} Back</button>
+    </div>
+    <div class="ph"><div><div class="pt">${intakeClientName(i.user_id).toUpperCase()}</div><div class="ps">Submitted ${new Date(i.created_at).toLocaleDateString('en-GB',{month:'short',day:'numeric',year:'numeric'})}</div></div>
+      <span class="tag ${i.status==='approved'?'tg':'to'}">${i.status==='approved'?'Approved':'Pending'}</span>
+    </div>
+    <div class="pgrid">
+      <div class="card"><div class="ch">Personal &amp; health</div>
+        ${intakeRow('Age',i.age)}${intakeRow('Weight',i.weight?i.weight+' kg':null)}${intakeRow('Height',i.height?i.height+' cm':null)}
+        ${i.substances?`<div class="ci-note" style="margin-top:8px;border-left:2px solid var(--o);border-radius:0 6px 6px 0">${i.substances}</div>`:''}
+      </div>
+      <div class="card"><div class="ch">Goals</div>
+        ${intakeRow('Primary goal',i.goal)}${intakeRow('Motivation',i.motivation)}${intakeRow('Expects from coaching',i.coach_expectation)}
+      </div>
+      <div class="card"><div class="ch">Training background</div>
+        ${intakeRow('Experience',i.experience)}${intakeRow('Days/week',i.training_days)}${intakeRow('Equipment',i.equipment)}
+        ${intakeRow('Injuries',i.injuries)}${intakeRow('Focus muscles',i.focus_muscles)}${intakeRow('History',i.training_history)}
+      </div>
+      <div class="card"><div class="ch">Lifestyle</div>
+        ${intakeRow('Activity level',i.activity_level)}${intakeRow('Sleep quality',i.sleep_quality)}
+        ${intakeRow('Discipline (1–10)',i.discipline_score)}${intakeRow('Obstacles',i.obstacles)}
+      </div>
+      <div class="card" style="grid-column:1/-1"><div class="ch">Nutrition</div>
+        ${intakeRow('Meals/day',i.meals_per_day)}${intakeRow('Diet preference',i.diet_preference)}${intakeRow('Current habits',i.nutrition_habits)}
+        ${intakeRow('Extra info',i.extra_info)}
+      </div>
+    </div>
+    ${i.status!=='approved'?`<button class="btn btn-p" style="width:100%;justify-content:center;margin-top:6px" onclick="approveIntake('${i.id}')">${ico('check',11)} Approve &amp; activate</button>`:`<div class="ai info"><div class="ai-ic">${ico('info',16)}</div><div><div class="ai-t">Already activated</div><div class="ai-s">This client has full dashboard access.</div></div></div>`}`;
+}
+
+async function approveIntake(id){
+  const{error}=await db.from('client_intakes').update({status:'approved',approved_at:new Date().toISOString()}).eq('id',id);
+  if(error){toast('Error approving — please try again');return;}
+  toast('Client approved — plan activated ✓');
+  await fetchIntakes();
+  renderIntakeDetail(document.getElementById('v-intake'));
+}
+
 // ── CLIENT VIEWS ──
 function vTo(el){
   const name=currentProfile?.full_name?.split(' ')[0]||'there';
@@ -895,7 +1079,7 @@ function vCal(el){
 
 function vMP(el){
   el.innerHTML=`
-    <div class="ph"><div><div class="pt">MY PLAN</div><div class="ps">Your personalised training & nutrition</div></div><button class="btn btn-g btn-sm" onclick="go('calendar')">${ico('cal',11)} Calendar view</button></div>
+    <div class="ph"><div><div class="pt">MY PLAN</div><div class="ps">Your personalised training &amp; nutrition</div></div><button class="btn btn-g btn-sm" onclick="go('calendar')">${ico('cal',11)} Calendar view</button></div>
     <div class="pgrid">
       <div class="card"><div class="ch">Weekly split</div>
         ${DAYS.map((d,i)=>`<div class="pr"><div class="pr-n">${d}</div><span class="dbt ${TR.includes(i)?'dbt-t':'dbt-r'}">${TR.includes(i)?SP[i]:'Rest'}</span></div>`).join('')}
@@ -922,6 +1106,115 @@ async function submitWorkoutLog(){
     return{name,sets:setData};
   });
   await saveWorkoutLog('Push',exercises);
+}
+
+// ── INTAKE WIZARD ──
+let intakeStep=0, intakeData={};
+const INTAKE_STEPS=[
+  {title:'Personal & Health',fields:[
+    {k:'age',l:'Age',type:'number',ph:'23'},
+    {k:'weight',l:'Current weight (kg)',type:'number',ph:'80'},
+    {k:'height',l:'Height (cm)',type:'number',ph:'180'},
+    {k:'substances',l:'Are you currently using or have you used any performance-enhancing substances or medications that affect training/nutrition? (e.g. testosterone/TRT, peptides, GLP-1 medications like Ozempic or Retatrutide, SARMs). This stays private and only helps me coach you safely.',type:'textarea',ph:'None, or please describe...'},
+  ]},
+  {title:'Training Background',fields:[
+    {k:'experience',l:'Training experience',type:'select',opts:['Beginner (0–1 yr)','Intermediate (1–3 yrs)','Advanced (3+ yrs)']},
+    {k:'training_history',l:'Describe your training history',type:'textarea',ph:'What have you done so far, what worked, what didn\'t...'},
+    {k:'training_days',l:'How many days per week can you train?',type:'select',opts:['2 days','3 days','4 days','5 days','6+ days']},
+    {k:'equipment',l:'Equipment access',type:'select',opts:['Home — minimal equipment','Home — full setup','Commercial gym','Both home & gym']},
+    {k:'injuries',l:'Any injuries or physical limitations?',type:'textarea',ph:'None, or please describe...'},
+    {k:'focus_muscles',l:'Any muscle groups you want to prioritize?',type:'textarea',ph:'e.g. chest, shoulders...'},
+  ]},
+  {title:'Lifestyle',fields:[
+    {k:'activity_level',l:'Daily activity outside the gym',type:'select',opts:['Sedentary (desk job)','Lightly active','Active (on your feet)','Very active']},
+    {k:'sleep_quality',l:'Sleep quality',type:'select',opts:['Poor','Average','Good','Excellent']},
+    {k:'discipline_score',l:'How disciplined are you with routines? (1–10)',type:'scale'},
+    {k:'obstacles',l:'What typically holds you back from consistency?',type:'textarea',ph:'Work, motivation, schedule...'},
+  ]},
+  {title:'Nutrition',fields:[
+    {k:'meals_per_day',l:'How many meals do you typically eat per day?',type:'select',opts:['2 meals','3 meals','4 meals','5+ meals']},
+    {k:'diet_preference',l:'Dietary preference or restrictions',type:'select',opts:['No preference','Vegetarian','Vegan','Halal','Kosher','Other']},
+    {k:'nutrition_habits',l:'Describe your current eating habits',type:'textarea',ph:'What do you usually eat in a day...'},
+  ]},
+  {title:'Goals & Expectations',fields:[
+    {k:'goal',l:'Primary goal',type:'select',opts:['Build muscle (bulk)','Lose fat (cut)','Recomposition','Performance/athletic']},
+    {k:'motivation',l:'What\'s motivating you to make a change now?',type:'textarea'},
+    {k:'coach_expectation',l:'What do you expect from coaching?',type:'textarea'},
+    {k:'extra_info',l:'Anything else I should know?',type:'textarea',ph:'Optional'},
+  ]},
+];
+
+function intakeFieldHTML(f){
+  const val=intakeData[f.k]??'';
+  if(f.type==='select'){
+    return`<select class="ci-input" id="ik-${f.k}">${f.opts.map(o=>`<option ${val===o?'selected':''}>${o}</option>`).join('')}</select>`;
+  }
+  if(f.type==='textarea'){
+    return`<textarea class="ci-input" id="ik-${f.k}" placeholder="${f.ph||''}" style="min-height:70px">${val}</textarea>`;
+  }
+  if(f.type==='scale'){
+    return`<div class="srow2" id="ik-${f.k}-row">${Array.from({length:10},(_,i)=>`<div class="sd2 ${val===i+1?'sel':''}" onclick="intakeData['${f.k}']=${i+1};this.parentNode.querySelectorAll('.sd2').forEach(d=>d.classList.remove('sel'));this.classList.add('sel')">${i+1}</div>`).join('')}</div>`;
+  }
+  return`<input class="ci-input" id="ik-${f.k}" type="${f.type}" placeholder="${f.ph||''}" value="${val}">`;
+}
+
+function renderIntakeStep(){
+  const s=INTAKE_STEPS[intakeStep];
+  const card=document.getElementById('intake-card');
+  card.innerHTML=`
+    <div style="display:flex;gap:5px;margin-bottom:20px">
+      ${INTAKE_STEPS.map((_,i)=>`<div style="flex:1;height:3px;border-radius:2px;background:${i<=intakeStep?'var(--a)':'var(--b1)'}"></div>`).join('')}
+    </div>
+    <div class="card" style="text-align:left">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:4px">Step ${intakeStep+1} of ${INTAKE_STEPS.length}</div>
+      <div style="font-family:'Bebas Neue';font-size:22px;letter-spacing:.06em;margin-bottom:16px">${s.title.toUpperCase()}</div>
+      ${s.fields.map(f=>`<div class="cif"><label>${f.l}</label>${intakeFieldHTML(f)}</div>`).join('')}
+      <div style="display:flex;gap:8px;margin-top:6px">
+        ${intakeStep>0?`<button class="btn btn-g" onclick="intakeBack()">${ico('arr',11)} Back</button>`:''}
+        <button class="btn btn-p" style="flex:1;justify-content:center" id="ik-next-btn" onclick="intakeNext()">${intakeStep===INTAKE_STEPS.length-1?'Submit intake':'Continue'}</button>
+      </div>
+      <div class="auth-err" id="ik-err"></div>
+    </div>`;
+}
+
+function saveIntakeStep(){
+  INTAKE_STEPS[intakeStep].fields.forEach(f=>{
+    if(f.type==='scale')return; // already saved live via onclick
+    const el=document.getElementById('ik-'+f.k);
+    if(el)intakeData[f.k]=el.value;
+  });
+}
+
+function intakeBack(){
+  saveIntakeStep();
+  intakeStep--;
+  renderIntakeStep();
+}
+
+async function intakeNext(){
+  saveIntakeStep();
+  if(intakeStep<INTAKE_STEPS.length-1){
+    intakeStep++;renderIntakeStep();return;
+  }
+  const btn=document.getElementById('ik-next-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Submitting...';
+  const payload={user_id:currentUser.id,status:'pending'};
+  INTAKE_STEPS.forEach(s=>s.fields.forEach(f=>{
+    let v=intakeData[f.k];
+    if(f.k==='age'||f.k==='weight'||f.k==='height'||f.k==='discipline_score'){
+      v=v!==undefined&&v!==''?Number(v):null;
+    }
+    payload[f.k]=v??null;
+  }));
+  const{data,error}=await db.from('client_intakes').insert(payload).select().single();
+  if(error){
+    btn.disabled=false;btn.innerHTML='Submit intake';
+    document.getElementById('ik-err').textContent='Something went wrong — please try again.';
+    document.getElementById('ik-err').className='auth-err error';
+    return;
+  }
+  currentIntake=data;
+  showApp('client');
 }
 
 function vPr(el){
@@ -1051,7 +1344,6 @@ let ttimer;
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(ttimer);ttimer=setTimeout(()=>t.classList.remove('show'),3500);}
 
 // ── INIT ──
-setSignupRole('client');
 initApp();
 </script>
 </body>
