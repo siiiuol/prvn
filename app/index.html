@@ -334,6 +334,52 @@ input[type=file]{display:none}
 .pe-row label{font-size:11px;color:var(--t2);font-weight:600}
 .pe-row input,.pe-row select,.pe-row textarea{width:100%;background:var(--s2);border:1px solid var(--b1);border-radius:7px;padding:8px 11px;color:var(--t1);font-family:var(--fb);font-size:13px}
 .pe-row input:focus,.pe-row select:focus,.pe-row textarea:focus{outline:none;border-color:var(--a)}
+/* ── PLAN REVEAL ── */
+#reveal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(3,3,3,0);backdrop-filter:blur(0px);transition:background .8s ease,backdrop-filter .8s ease;overflow-y:auto;padding:40px 20px}
+#reveal.show{display:flex;background:rgba(3,3,3,.92);backdrop-filter:blur(14px)}
+#reveal-glow{position:absolute;top:50%;left:50%;width:600px;height:600px;transform:translate(-50%,-50%) scale(.4);border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.16),rgba(255,255,255,.04) 40%,transparent 70%);opacity:0;pointer-events:none;transition:opacity 1.2s ease,transform 1.6s cubic-bezier(.22,1,.36,1)}
+#reveal.show #reveal-glow{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#reveal-stage{position:relative;width:100%;max-width:560px;text-align:center}
+#reveal-intro{display:flex;flex-direction:column;align-items:center;transition:opacity .6s ease,transform .6s ease}
+#reveal-intro.gone{opacity:0;transform:translateY(-20px);pointer-events:none;position:absolute;top:0;left:0;right:0}
+#reveal-ring{width:112px;height:112px;border-radius:50%;border:1px solid var(--ad2);display:flex;align-items:center;justify-content:center;color:var(--a);margin-bottom:30px;position:relative;opacity:0;transform:scale(.7);animation:ringIn 1s cubic-bezier(.22,1,.36,1) .3s forwards}
+#reveal-ring::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid transparent;border-top-color:rgba(255,255,255,.4);animation:ringSpin 2.4s linear infinite}
+#reveal-ring::after{content:'';position:absolute;inset:0;border-radius:50%;box-shadow:0 0 50px rgba(255,255,255,.25);animation:ringPulse 2.6s ease-in-out infinite}
+@keyframes ringIn{to{opacity:1;transform:scale(1)}}
+@keyframes ringSpin{to{transform:rotate(360deg)}}
+@keyframes ringPulse{0%,100%{box-shadow:0 0 40px rgba(255,255,255,.15)}50%{box-shadow:0 0 70px rgba(255,255,255,.35)}}
+#reveal-kicker{font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--t2);opacity:0;animation:fadeUp .8s ease .7s forwards}
+#reveal-title{font-family:var(--fd);font-size:clamp(34px,6vw,52px);line-height:1;letter-spacing:.04em;text-transform:uppercase;margin-top:16px;opacity:0;animation:fadeUp .9s cubic-bezier(.22,1,.36,1) .9s forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+#reveal-plan{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,1,.36,1);pointer-events:none;text-align:left}
+#reveal-plan.show{opacity:1;transform:none;pointer-events:auto}
+.rv-card{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:22px;margin-bottom:12px;opacity:0;transform:translateY(24px)}
+.rv-card.in{animation:cardRise .7s cubic-bezier(.22,1,.36,1) forwards}
+@keyframes cardRise{to{opacity:1;transform:none}}
+.rv-h{font-family:var(--fd);font-size:16px;letter-spacing:.08em;color:var(--t2);margin-bottom:14px;text-transform:uppercase}
+.rv-macros{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.rv-macro{text-align:center;background:var(--s2);border:1px solid var(--b1);border-radius:10px;padding:14px 8px}
+.rv-macro .v{font-family:var(--fd);font-size:26px;line-height:1;letter-spacing:.03em}
+.rv-macro .l{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-top:5px}
+.rv-line{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--b1);font-size:14px}
+.rv-line:last-child{border-bottom:none}.rv-line .k{color:var(--t2)}.rv-line .v{font-weight:600}
+.rv-note{font-size:14px;color:var(--t2);line-height:1.7;white-space:pre-wrap}
+#reveal-start{margin-top:8px;width:100%;padding:16px;background:var(--a);color:var(--bg);border:none;border-radius:10px;font-family:var(--fb);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .2s cubic-bezier(.22,1,.36,1);opacity:0;transform:translateY(20px)}
+#reveal-start.in{animation:cardRise .6s cubic-bezier(.22,1,.36,1) forwards}
+#reveal-start:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(255,255,255,.18)}
+#reveal-start:active{transform:scale(.97)}
+
+/* ── ANIMATION LAYER ── */
+.view.active{animation:viewIn .5s cubic-bezier(.22,1,.36,1)}
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card,.sc,.cc,.mb,.ci-row{animation:softIn .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes softIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.skel{background:linear-gradient(90deg,var(--s2) 25%,var(--s3) 50%,var(--s2) 75%);background-size:200% 100%;animation:shimmer 1.3s infinite;border-radius:8px}
+@keyframes shimmer{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){
+  #reveal-glow,#reveal-ring::before,#reveal-ring::after,.view.active,.card,.sc,.cc,.mb,.ci-row{animation:none!important}
+  #reveal-plan,#reveal-intro{transition:none}
+}
 @media(max-width:700px){
   :root{--sb:0px}
   #sb{display:none}
@@ -441,6 +487,21 @@ input[type=file]{display:none}
   <div id="main"></div>
 </div>
 
+<!-- PLAN REVEAL -->
+<div id="reveal" aria-hidden="true">
+  <div id="reveal-glow"></div>
+  <div id="reveal-stage">
+    <div id="reveal-intro">
+      <div id="reveal-ring">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+      </div>
+      <div id="reveal-kicker">Your coach has been working</div>
+      <div id="reveal-title">Your new coaching<br>plan has arrived</div>
+    </div>
+    <div id="reveal-plan"></div>
+  </div>
+</div>
+
 <div id="toast"></div>
 <div id="mo"><div id="md"><h3 id="md-t">Confirm</h3><p id="md-b">Are you sure?</p><div class="mdb"><button class="btn btn-g btn-sm" onclick="closeModal()">Cancel</button><button class="btn btn-p btn-sm" id="md-ok">Confirm</button></div></div></div>
 <input type="file" id="file-in" accept="image/*" onchange="handleUpload(event)">
@@ -501,6 +562,68 @@ async function checkPendingStatus(manual){
   }catch(e){if(manual)toast('Could not check — try again');}
 }
 
+function countUp(el,target,dur){
+  const start=performance.now();
+  function tick(now){
+    const p=Math.min((now-start)/dur,1);
+    const eased=1-Math.pow(1-p,3);
+    el.textContent=Math.round(target*eased).toLocaleString();
+    if(p<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function playPlanReveal(){
+  const p=myPlan;if(!p)return;
+  const rv=document.getElementById('reveal');
+  const intro=document.getElementById('reveal-intro');
+  const planBox=document.getElementById('reveal-plan');
+  intro.classList.remove('gone');
+  planBox.classList.remove('show');planBox.innerHTML='';
+  rv.style.display='flex';
+  requestAnimationFrame(()=>rv.classList.add('show'));
+
+  // After the intro title lands, transition to the plan
+  setTimeout(()=>{
+    intro.classList.add('gone');
+    planBox.innerHTML=`
+      <div class="rv-card" data-i="0">
+        <div class="rv-h">Your macros</div>
+        <div class="rv-macros">
+          <div class="rv-macro"><div class="v" data-count="${p.kcal||0}">0</div><div class="l">Kcal</div></div>
+          <div class="rv-macro"><div class="v" data-count="${p.protein||0}">0</div><div class="l">Protein</div></div>
+          <div class="rv-macro"><div class="v" data-count="${p.carbs||0}">0</div><div class="l">Carbs</div></div>
+          <div class="rv-macro"><div class="v" data-count="${p.fat||0}">0</div><div class="l">Fat</div></div>
+        </div>
+      </div>
+      <div class="rv-card" data-i="1">
+        <div class="rv-h">Training</div>
+        <div class="rv-line"><span class="k">Split</span><span class="v">${escapeHtml(p.split||'—')}</span></div>
+        <div class="rv-line"><span class="k">Days / week</span><span class="v">${p.days||'—'}</span></div>
+        ${p.volume?`<div class="rv-line"><span class="k">Focus</span><span class="v">${escapeHtml(p.volume)}</span></div>`:''}
+      </div>
+      ${p.training_notes?`<div class="rv-card" data-i="2"><div class="rv-h">A note from your coach</div><div class="rv-note">${escapeHtml(p.training_notes)}</div></div>`:''}
+      <button id="reveal-start" onclick="closePlanReveal()">Start my journey</button>`;
+    planBox.classList.add('show');
+
+    // Stagger the cards in
+    const cards=planBox.querySelectorAll('.rv-card');
+    cards.forEach((c,idx)=>setTimeout(()=>{
+      c.classList.add('in');
+      c.querySelectorAll('[data-count]').forEach(el=>countUp(el,parseInt(el.dataset.count)||0,900));
+    },idx*280));
+    const btn=document.getElementById('reveal-start');
+    setTimeout(()=>btn.classList.add('in'),cards.length*280+200);
+  },2400);
+}
+
+function closePlanReveal(){
+  const rv=document.getElementById('reveal');
+  try{localStorage.setItem('prvn_plan_seen_'+currentUser.id,window._planUpdatedAt||'seen');}catch(e){}
+  rv.classList.remove('show');
+  setTimeout(()=>{rv.style.display='none';go('today');},700);
+}
+
 const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const TR=[0,2,4];
@@ -552,6 +675,7 @@ async function onSignedIn(user){
     try{
       const{data:plan}=await db.from('client_plans').select('*').eq('user_id',user.id).maybeSingle();
       myPlan=plan?.plan_data||null;
+      window._planUpdatedAt=plan?.updated_at||null;
     }catch(e){myPlan=null;}
   }
   showApp(r);
@@ -653,6 +777,10 @@ function showApp(r){
   document.getElementById('nav-urole').textContent=role==='coach'?'Coach':'Client';
   document.getElementById('nav-av').textContent=name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
   buildNav();buildSB();render();
+  if(role==='client'&&myPlan&&window._planUpdatedAt){
+    let seen=null;try{seen=localStorage.getItem('prvn_plan_seen_'+currentUser.id);}catch(e){}
+    if(seen!==window._planUpdatedAt){setTimeout(()=>playPlanReveal(),600);}
+  }
 }
 
 function hideApp(){
