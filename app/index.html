@@ -223,7 +223,55 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;o
 .mcal-n{font-family:var(--fd);font-size:16px;letter-spacing:.03em;color:var(--t2)}
 .mcal-dot{width:6px;height:6px;border-radius:50%;background:var(--a)}
 .mcal-dot.done{width:16px;height:16px;display:flex;align-items:center;justify-content:center;background:var(--gd);border:1px solid var(--t1);color:var(--t1);font-size:9px;font-weight:700}
+/* ── EVENTS SYSTEM ── */
+:root{
+  --cat-workout:#FFFFFF;--cat-checkin:#C9C9C9;--cat-call:#9E9E9E;
+  --cat-nutrition:#B8B8B8;--cat-reminder:#7A7A7A;--cat-goal:#E8E8E8;
+}
+.ev-cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ev-row{display:flex;align-items:center;gap:13px;background:var(--s1);border:1px solid var(--b1);border-radius:11px;padding:14px 16px;margin-bottom:9px;cursor:pointer;transition:.2s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden}
+.ev-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--catcolor,var(--t3))}
+.ev-row:hover{border-color:var(--b3);transform:translateX(2px)}
+.ev-row.done{opacity:.55}
+.ev-row.missed{border-color:rgba(239,68,68,.25)}
+.ev-time{font-family:var(--fd);font-size:15px;letter-spacing:.04em;color:var(--t1);min-width:60px;text-align:center;line-height:1.1}
+.ev-time .d{font-size:9px;color:var(--t3);font-family:var(--fb);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+.ev-body{flex:1;min-width:0}
+.ev-title{font-size:14px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev-meta{font-size:11px;color:var(--t2);display:flex;align-items:center;gap:7px}
+.ev-cat-lbl{text-transform:capitalize}
+.ev-status{font-size:9px;font-weight:700;padding:3px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.06em;flex-shrink:0}
+.ev-st-upcoming{background:var(--s4);color:var(--t2)}
+.ev-st-completed{background:var(--gd);color:var(--t1)}
+.ev-st-missed{background:var(--rd);color:var(--r)}
+.ev-attach{display:inline-flex;align-items:center;gap:4px;color:var(--t2)}
+
+/* Event modal */
+#evmo{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:600;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);padding:20px}
+#evmo.show{display:flex}
+#evmo-card{background:var(--s1);border:1px solid var(--b2);border-radius:16px;padding:26px;max-width:440px;width:100%;max-height:90vh;overflow-y:auto;transform:translateY(16px) scale(.98);opacity:0;transition:.32s cubic-bezier(.22,1,.36,1)}
+#evmo.show #evmo-card{transform:none;opacity:1}
+#evmo-card h3{font-family:var(--fd);font-size:24px;letter-spacing:.06em;margin-bottom:4px}
+.evmo-cat-pick{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.evmo-cat{display:flex;align-items:center;gap:7px;padding:8px 13px;border-radius:8px;border:1px solid var(--b2);background:var(--s2);color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;transition:.15s;text-transform:capitalize}
+.evmo-cat.on{border-color:var(--a);color:var(--t1);background:var(--s4)}
+.evf{margin-bottom:12px}
+.evf label{display:block;font-size:9px;font-weight:700;color:var(--t3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.12em}
+.evf input,.evf select,.evf textarea{width:100%;background:var(--s2);border:1px solid var(--b1);border-radius:8px;padding:10px 13px;color:var(--t1);font-family:var(--fb);font-size:14px;transition:.15s}
+.evf input:focus,.evf select:focus,.evf textarea:focus{outline:none;border-color:var(--a)}
+.evf textarea{min-height:64px;resize:vertical}
+.evf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.evmo-note-badge{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);background:var(--s3);padding:2px 7px;border-radius:4px;margin-left:6px}
+
+/* Dashboard schedule */
+.sched-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin-bottom:26px}
+.count-card{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:20px;display:flex;flex-direction:column;justify-content:center}
+.count-lbl{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
+.count-big{font-family:var(--fd);font-size:40px;line-height:1;letter-spacing:.03em}
+.count-sub{font-size:12px;color:var(--t2);margin-top:6px}
+.mini-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:26px}
 @media(max-width:700px){
+  .sched-grid,.evf-row,.mini-stat-row{grid-template-columns:1fr}
   .mcal-n{font-size:13px}
   .cal-toggle{width:100%}
   .cal-tg{flex:1}
@@ -535,9 +583,12 @@ input[type=file]{display:none}
   </div>
 </div>
 
+<!-- EVENT MODAL -->
+<div id="evmo"><div id="evmo-card"></div></div>
+
 <div id="toast"></div>
 <div id="mo"><div id="md"><h3 id="md-t">Confirm</h3><p id="md-b">Are you sure?</p><div class="mdb"><button class="btn btn-g btn-sm" onclick="closeModal()">Cancel</button><button class="btn btn-p btn-sm" id="md-ok">Confirm</button></div></div></div>
-<input type="file" id="file-in" accept="image/*" onchange="handleUpload(event)">
+<input type="file" id="file-in" accept="image/*">
 
 <script>
 // ══════════════════════════════════════════
@@ -863,7 +914,7 @@ function openC(id){actC=id;cTab=0;view='client';buildNav();buildSB();render();}
 // ── NAV ──
 function buildNav(){
   const ct=[{v:'overview',l:'Overview'},{v:'clients',l:'Clients'},{v:'intake',l:'Intake'},{v:'invites',l:'Invites'},{v:'messages',l:'Messages'},{v:'analytics',l:'Analytics'},{v:'billing',l:'Billing'}];
-  const cl=[{v:'today',l:'Today'},{v:'calendar',l:'Calendar'},{v:'myplan',l:'Plan'},{v:'log',l:'Log'},{v:'myprog',l:'Progress'},{v:'checkin',l:'Check-in'},{v:'habits',l:'Habits'},{v:'mymsg',l:'Messages'},{v:'subscription',l:'Subscription'}];
+  const cl=[{v:'today',l:'Today'},{v:'schedule',l:'Schedule'},{v:'calendar',l:'Calendar'},{v:'myplan',l:'Plan'},{v:'log',l:'Log'},{v:'myprog',l:'Progress'},{v:'checkin',l:'Check-in'},{v:'habits',l:'Habits'},{v:'mymsg',l:'Messages'},{v:'subscription',l:'Subscription'}];
   document.getElementById('nav-tabs').innerHTML=(role==='coach'?ct:cl).map(t=>`<button class="ntab ${view===t.v||view==='client'&&t.v==='clients'?'active':''}" onclick="go('${t.v}')">${t.l}</button>`).join('');
 }
 
@@ -891,7 +942,7 @@ function buildSB(){
         <button class="sb-item ${view==='messages'?'active':''}" onclick="go('messages')"><span class="sb-ic">${ico('msg')}</span>Messages</button>
       </div>`;
   }else{
-    const its=[{v:'today',i:'cal',l:'Today'},{v:'calendar',i:'cal',l:'My Calendar'},{v:'myplan',i:'layers',l:'My Plan'},{v:'log',i:'clip',l:'Log Workout'},{v:'myprog',i:'trend',l:'Progress'},{v:'checkin',i:'check',l:'Check-in'},{v:'habits',i:'flame',l:'Habits'},{v:'mymsg',i:'msg',l:'Messages'},{v:'subscription',i:'star',l:'Subscription'}];
+    const its=[{v:'today',i:'cal',l:'Today'},{v:'schedule',i:'clip',l:'Schedule'},{v:'calendar',i:'cal',l:'My Calendar'},{v:'myplan',i:'layers',l:'My Plan'},{v:'log',i:'clip',l:'Log Workout'},{v:'myprog',i:'trend',l:'Progress'},{v:'checkin',i:'check',l:'Check-in'},{v:'habits',i:'flame',l:'Habits'},{v:'mymsg',i:'msg',l:'Messages'},{v:'subscription',i:'star',l:'Subscription'}];
     sb.innerHTML=`<div class="sb-sec"><div class="sb-lbl">${currentProfile?.full_name?.split(' ')[0]||'You'}</div>${its.map(it=>`<button class="sb-item ${view===it.v?'active':''}" onclick="go('${it.v}')"><span class="sb-ic">${ico(it.i)}</span>${it.l}</button>`).join('')}</div>`;
   }
 }
@@ -899,9 +950,9 @@ function buildSB(){
 // ── RENDER ──
 function render(){
   const m=document.getElementById('main');
-  const vs=['overview','clients','client','intake','invites','messages','analytics','billing','today','calendar','myplan','log','myprog','checkin','habits','mymsg','subscription'];
+  const vs=['overview','clients','client','intake','invites','messages','analytics','billing','today','schedule','calendar','myplan','log','myprog','checkin','habits','mymsg','subscription'];
   vs.forEach(v=>{let el=document.getElementById('v-'+v);if(!el){el=document.createElement('div');el.id='v-'+v;el.className='view';m.appendChild(el);}el.classList.toggle('active',v===view);});
-  const fn={overview:vOv,clients:vCl,client:vC,intake:vIntake,invites:vInv,messages:vMsg,analytics:vAn,billing:vBi,today:vTo,calendar:vCal,myplan:vMP,log:vLg,myprog:vPr,checkin:vCi,habits:vHb,mymsg:vMM,subscription:vSub};
+  const fn={overview:vOv,clients:vCl,client:vC,intake:vIntake,invites:vInv,messages:vMsg,analytics:vAn,billing:vBi,today:vTo,schedule:vSchedule,calendar:vCal,myplan:vMP,log:vLg,myprog:vPr,checkin:vCi,habits:vHb,mymsg:vMM,subscription:vSub};
   const el=document.getElementById('v-'+view);if(el&&fn[view])fn[view](el);
 }
 
@@ -957,7 +1008,7 @@ async function vC(el){
   clientIntake=intake||null;
   const{data:plan}=await db.from('client_plans').select('*').eq('user_id',c.id).maybeSingle();
   clientPlanDraft=plan?.plan_data||null;
-  const pnls=['Overview','Plan editor','Check-ins','Nutrition','Messages'];
+  const pnls=['Overview','Plan editor','Check-ins','Nutrition','Messages','Events'];
   el.innerHTML=`
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
       <button class="btn btn-g btn-sm" onclick="go('clients')">${ico('arr')} Back</button>
@@ -1019,7 +1070,10 @@ async function rCP(c){
         <div class="card"><div class="ch">Goals & motivation</div>
           ${intakeRow('Goal',i.goal)}${intakeRow('Motivation',i.motivation)}${intakeRow('Expects',i.coach_expectation)}${intakeRow('Extra',i.extra_info)}
         </div>
-      </div>`;
+      </div>
+      <div class="slbl">Progress photos</div>
+      <div id="coach-photos" class="pstrip"><div class="pb skel" style="border:none"></div></div>`;
+    loadCoachPhotos(c.id);
   }else if(cTab===1){
     renderPlanEditor(p,c);
   }else if(cTab===2){
@@ -1048,6 +1102,11 @@ async function rCP(c){
     </div>
     ${pl.nutrition_notes?`<div class="card"><div class="ch">Notes</div><div style="font-size:13px;color:var(--t2);line-height:1.7;white-space:pre-wrap">${escapeHtml(pl.nutrition_notes)}</div></div>`:''}`;
   }else if(cTab===4){p.style.height='420px';p.style.display='flex';buildChat(p,c.id,c.full_name||'Client',false);}
+  else if(cTab===5){
+    p.innerHTML=`<div class="loading"><span class="spinner"></span>Loading events...</div>`;
+    await fetchClientEvents(c.id);
+    renderClientEvents(p,c.id);
+  }
 }
 
 function renderPlanEditor(p,c){
@@ -1093,6 +1152,203 @@ async function savePlan(userId){
   clientPlanDraft=plan_data;
   msg.style.color='var(--a)';msg.textContent='Plan saved and sent to client ✓';
   toast('Plan saved ✓');
+}
+
+// ══════════════════════════════════════════
+// EVENTS SYSTEM
+// ══════════════════════════════════════════
+const EV_CATS=['workout','checkin','call','nutrition','reminder','goal'];
+const EV_CAT_LABEL={workout:'Workout',checkin:'Check-in',call:'Call',nutrition:'Nutrition',reminder:'Reminder',goal:'Goal'};
+const EV_CAT_VAR={workout:'var(--cat-workout)',checkin:'var(--cat-checkin)',call:'var(--cat-call)',nutrition:'var(--cat-nutrition)',reminder:'var(--cat-reminder)',goal:'var(--cat-goal)'};
+let evEditing=null, evEditCat='workout', evClientEvents=[], myEvents=[], evFilter='all';
+
+function evTimeFmt(t){
+  if(!t)return'';
+  const[h,m]=t.split(':');const hh=parseInt(h);
+  return`${hh}:${m}`;
+}
+function evDateLabel(dateStr){
+  const d=new Date(dateStr+'T00:00:00');
+  return`${MONTHS[d.getMonth()]} ${d.getDate()}`;
+}
+function evShortDate(dateStr){
+  const d=new Date(dateStr+'T00:00:00');
+  return{day:d.getDate(),mon:MONTHS[d.getMonth()].toUpperCase()};
+}
+function evComputeStatus(ev){
+  if(ev.status==='completed')return'completed';
+  const now=new Date();const evDay=new Date(ev.event_date+'T'+(ev.event_time||'23:59'));
+  if(evDay<now && ev.status!=='completed')return'missed';
+  return'upcoming';
+}
+
+function evRowHTML(ev,isCoach){
+  const st=evComputeStatus(ev);
+  const sd=evShortDate(ev.event_date);
+  return`<div class="ev-row ${st==='completed'?'done':''} ${st==='missed'?'missed':''}" style="--catcolor:${EV_CAT_VAR[ev.category]}" onclick="openEvent('${ev.id}',${isCoach})">
+    <div class="ev-time">${ev.event_time?evTimeFmt(ev.event_time):sd.day}<div class="d">${sd.mon}</div></div>
+    <div class="ev-body">
+      <div class="ev-title">${escapeHtml(ev.title)}</div>
+      <div class="ev-meta"><span class="ev-cat-dot ev-${ev.category}"></span><span class="ev-cat-lbl">${EV_CAT_LABEL[ev.category]}</span>${ev.attachment_url?`<span class="ev-attach">· ${ico('clip',10)} File</span>`:''}${isCoach&&ev.coach_notes?'<span class="evmo-note-badge">Note</span>':''}</div>
+    </div>
+    <span class="ev-status ev-st-${st}">${st}</span>
+  </div>`;
+}
+
+async function fetchClientEvents(userId){
+  const{data}=await db.from('client_events').select('*').eq('user_id',userId).order('event_date',{ascending:true}).order('event_time',{ascending:true,nullsFirst:true});
+  evClientEvents=data||[];
+  return evClientEvents;
+}
+
+function renderClientEvents(container,userId){
+  const upcoming=evClientEvents.filter(e=>evComputeStatus(e)==='upcoming');
+  const past=evClientEvents.filter(e=>evComputeStatus(e)!=='upcoming');
+  container.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div class="slbl" style="margin-bottom:0;flex:1">Scheduled events</div>
+      <button class="btn btn-p btn-sm" onclick="openNewEvent('${userId}')">${ico('plus',11)} Add event</button>
+    </div>
+    ${evClientEvents.length===0?`<div class="empty-state">${ico('cal',28)}<h3>No events scheduled</h3><p>Add check-ins, calls, reminders, and deadlines for this client.</p></div>`:''}
+    ${upcoming.length?`<div style="margin-bottom:18px">${upcoming.map(e=>evRowHTML(e,true)).join('')}</div>`:''}
+    ${past.length?`<div class="slbl">Past</div>${past.map(e=>evRowHTML(e,true)).join('')}`:''}`;
+}
+
+function openNewEvent(userId){
+  evEditing={user_id:userId,isNew:true};
+  evEditCat='workout';
+  renderEventEditor();
+}
+
+function openEvent(id,isCoach){
+  const list=isCoach?evClientEvents:myEvents;
+  const ev=list.find(x=>x.id===id);
+  if(!ev)return;
+  if(isCoach){
+    evEditing={...ev,isNew:false};
+    evEditCat=ev.category;
+    renderEventEditor();
+  }else{
+    renderEventViewer(ev);
+  }
+}
+
+function renderEventEditor(){
+  const e=evEditing;
+  const card=document.getElementById('evmo-card');
+  card.innerHTML=`
+    <h3>${e.isNew?'New event':'Edit event'}</h3>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:18px">${e.isNew?'Schedule an activity for your client':'Update or remove this event'}</div>
+    <div class="evf"><label>Category</label>
+      <div class="evmo-cat-pick">${EV_CATS.map(c=>`<div class="evmo-cat ${evEditCat===c?'on':''}" onclick="evEditCat='${c}';renderEventEditor()"><span class="ev-cat-dot ev-${c}"></span>${EV_CAT_LABEL[c]}</div>`).join('')}</div>
+    </div>
+    <div class="evf"><label>Title</label><input id="ev-title" placeholder="e.g. Weekly check-in" value="${escapeHtml(e.title||'')}"></div>
+    <div class="evf-row">
+      <div class="evf"><label>Date</label><input id="ev-date" type="date" value="${e.event_date||''}"></div>
+      <div class="evf"><label>Time (optional)</label><input id="ev-time" type="time" value="${e.event_time?e.event_time.slice(0,5):''}"></div>
+    </div>
+    <div class="evf"><label>Description (visible to client)</label><textarea id="ev-desc" placeholder="Details for your client...">${escapeHtml(e.description||'')}</textarea></div>
+    <div class="evf"><label>Attachment link (optional)</label><input id="ev-attach" placeholder="https://..." value="${escapeHtml(e.attachment_url||'')}"></div>
+    <div class="evf"><label>Private coach notes <span class="evmo-note-badge">Only you</span></label><textarea id="ev-notes" placeholder="Notes only you can see...">${escapeHtml(e.coach_notes||'')}</textarea></div>
+    <div style="display:flex;gap:8px;margin-top:6px">
+      ${!e.isNew?`<button class="btn btn-d btn-sm" onclick="deleteEvent('${e.id}')">Delete</button>`:''}
+      <button class="btn btn-g btn-sm" onclick="closeEventModal()">Cancel</button>
+      <button class="btn btn-p btn-sm" style="flex:1;justify-content:center" id="ev-save" onclick="saveEvent()">${e.isNew?'Create event':'Save changes'}</button>
+    </div>`;
+  document.getElementById('evmo').classList.add('show');
+}
+
+function renderEventViewer(ev){
+  const st=evComputeStatus(ev);
+  const card=document.getElementById('evmo-card');
+  card.innerHTML=`
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:6px"><span class="ev-cat-dot ev-${ev.category}" style="width:10px;height:10px"></span><span style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t2)">${EV_CAT_LABEL[ev.category]}</span></div>
+    <h3>${escapeHtml(ev.title)}</h3>
+    <div style="font-size:13px;color:var(--t2);margin:8px 0 18px">${evDateLabel(ev.event_date)}${ev.event_time?' · '+evTimeFmt(ev.event_time):''}</div>
+    ${ev.description?`<div class="card" style="margin-bottom:14px"><div style="font-size:14px;color:var(--t1);line-height:1.7;white-space:pre-wrap">${escapeHtml(ev.description)}</div></div>`:''}
+    ${ev.attachment_url?`<a href="${escapeHtml(ev.attachment_url)}" target="_blank" rel="noopener" class="btn btn-g btn-sm" style="margin-bottom:14px">${ico('clip',11)} Open attachment</a>`:''}
+    <div style="display:flex;gap:8px;margin-top:6px">
+      <button class="btn btn-g btn-sm" onclick="closeEventModal()">Close</button>
+      ${st!=='completed'?`<button class="btn btn-p btn-sm" style="flex:1;justify-content:center" onclick="clientCompleteEvent('${ev.id}')">${ico('check',11)} Mark complete</button>`:`<div class="btn btn-sm" style="flex:1;justify-content:center;background:var(--gd);color:var(--t1);cursor:default">Completed ✓</div>`}
+    </div>`;
+  document.getElementById('evmo').classList.add('show');
+}
+
+function closeEventModal(){document.getElementById('evmo').classList.remove('show');}
+
+async function saveEvent(){
+  const btn=document.getElementById('ev-save');
+  const title=document.getElementById('ev-title').value.trim();
+  const date=document.getElementById('ev-date').value;
+  if(!title){toast('Please enter a title');return;}
+  if(!date){toast('Please pick a date');return;}
+  const payload={
+    user_id:evEditing.user_id,
+    title,category:evEditCat,event_date:date,
+    event_time:document.getElementById('ev-time').value||null,
+    description:document.getElementById('ev-desc').value||null,
+    attachment_url:document.getElementById('ev-attach').value||null,
+    coach_notes:document.getElementById('ev-notes').value||null,
+    updated_at:new Date().toISOString(),
+  };
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Saving...';
+  let error;
+  if(evEditing.isNew){({error}=await db.from('client_events').insert(payload));}
+  else{({error}=await db.from('client_events').update(payload).eq('id',evEditing.id));}
+  btn.disabled=false;
+  if(error){toast('Save failed — try again');btn.innerHTML='Save';return;}
+  closeEventModal();
+  toast(evEditing.isNew?'Event created ✓':'Event updated ✓');
+  await fetchClientEvents(evEditing.user_id);
+  const panel=document.getElementById('cpnl');
+  if(panel&&cTab===5)renderClientEvents(panel,evEditing.user_id);
+}
+
+async function deleteEvent(id){
+  const uid=evEditing.user_id;
+  const{error}=await db.from('client_events').delete().eq('id',id);
+  if(error){toast('Delete failed');return;}
+  closeEventModal();toast('Event deleted');
+  await fetchClientEvents(uid);
+  const panel=document.getElementById('cpnl');
+  if(panel&&cTab===5)renderClientEvents(panel,uid);
+}
+
+async function fetchMyEvents(){
+  const{data}=await db.from('client_events_public').select('*').eq('user_id',currentUser.id).order('event_date',{ascending:true}).order('event_time',{ascending:true,nullsFirst:true});
+  myEvents=data||[];
+  return myEvents;
+}
+
+async function clientCompleteEvent(id){
+  const{error}=await db.from('client_events').update({status:'completed',updated_at:new Date().toISOString()}).eq('id',id);
+  if(error){toast('Could not update');return;}
+  const ev=myEvents.find(x=>x.id===id);if(ev)ev.status='completed';
+  closeEventModal();toast('Marked complete ✓');
+  const el=document.getElementById('v-schedule');
+  if(el&&view==='schedule')vSchedule(el);
+  const t=document.getElementById('v-today');
+  if(t&&view==='today')vTo(t);
+}
+
+async function vSchedule(el){
+  el.innerHTML=`<div class="ph"><div><div class="pt">SCHEDULE</div><div class="ps">Your coaching activities</div></div></div>
+    <div class="ev-row skel" style="height:60px;border:none"></div><div class="ev-row skel" style="height:60px;border:none"></div>`;
+  await fetchMyEvents();
+  const cats=['all',...EV_CATS];
+  const filtered=evFilter==='all'?myEvents:myEvents.filter(e=>e.category===evFilter);
+  const upcoming=filtered.filter(e=>evComputeStatus(e)==='upcoming');
+  const done=filtered.filter(e=>evComputeStatus(e)==='completed');
+  const missed=filtered.filter(e=>evComputeStatus(e)==='missed');
+  el.innerHTML=`
+    <div class="ph"><div><div class="pt">SCHEDULE</div><div class="ps">Your coaching activities</div></div></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px">
+      ${cats.map(c=>`<button class="cal-tg ${evFilter===c?'on':''}" style="border:1px solid var(--b2);border-radius:7px" onclick="evFilter='${c}';vSchedule(document.getElementById('v-schedule'))">${c==='all'?'All':EV_CAT_LABEL[c]}</button>`).join('')}
+    </div>
+    ${myEvents.length===0?`<div class="empty-state">${ico('cal',28)}<h3>Nothing scheduled yet</h3><p>Your coach will add check-ins, calls, and reminders here.</p></div>`:''}
+    ${upcoming.length?`<div class="slbl">Upcoming</div><div style="margin-bottom:18px">${upcoming.map(e=>evRowHTML(e,false)).join('')}</div>`:''}
+    ${missed.length?`<div class="slbl">Missed</div><div style="margin-bottom:18px">${missed.map(e=>evRowHTML(e,false)).join('')}</div>`:''}
+    ${done.length?`<div class="slbl">Completed</div>${done.map(e=>evRowHTML(e,false)).join('')}`:''}`;
 }
 
 async function vMsg(el){
@@ -1428,9 +1684,43 @@ async function approveIntake(id){
 }
 
 // ── CLIENT VIEWS ──
-function vTo(el){
+async function vTo(el){
   const name=currentProfile?.full_name?.split(' ')[0]||'there';
   const kcal=myPlan?.kcal||3200,prot=myPlan?.protein||176,carb=myPlan?.carbs||380,fat=myPlan?.fat||89;
+  await fetchMyEvents();
+  const todayKey=dateKey(new Date());
+  const now=new Date();
+  const in7=new Date();in7.setDate(in7.getDate()+7);
+  const todays=myEvents.filter(e=>e.event_date===todayKey&&evComputeStatus(e)!=='completed');
+  const upcoming7=myEvents.filter(e=>{const d=new Date(e.event_date+'T00:00:00');return d>now&&d<=in7&&evComputeStatus(e)==='upcoming';});
+  const outstanding=myEvents.filter(e=>evComputeStatus(e)==='upcoming'||evComputeStatus(e)==='missed').length;
+  const weekStart=new Date();weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));weekStart.setHours(0,0,0,0);
+  const doneThisWeek=myEvents.filter(e=>{if(e.status!=='completed')return false;const d=new Date(e.event_date+'T00:00:00');return d>=weekStart;}).length;
+  const nextCall=myEvents.filter(e=>e.category==='call'&&evComputeStatus(e)==='upcoming').sort((a,b)=>(a.event_date+a.event_time).localeCompare(b.event_date+(b.event_time||'')))[0];
+  let callCountdown='—',callSub='No call scheduled';
+  if(nextCall){
+    const cd=new Date(nextCall.event_date+'T'+(nextCall.event_time||'12:00'));
+    const days=Math.ceil((cd-now)/(1000*60*60*24));
+    callCountdown=days<=0?'Today':days+(days===1?' day':' days');
+    callSub=evDateLabel(nextCall.event_date)+(nextCall.event_time?' · '+evTimeFmt(nextCall.event_time):'');
+  }
+  const schedBlock=`
+    <div class="sched-grid">
+      <div class="card">
+        <div class="ch">Today's schedule</div>
+        ${todays.length?todays.map(e=>evRowHTML(e,false)).join(''):`<div style="font-size:13px;color:var(--t3);padding:8px 0">Nothing scheduled today. ${upcoming7.length?'Next up below.':''}</div>`}
+      </div>
+      <div class="count-card">
+        <div class="count-lbl">Next coaching call</div>
+        <div class="count-big">${callCountdown}</div>
+        <div class="count-sub">${callSub}</div>
+      </div>
+    </div>
+    <div class="mini-stat-row">
+      <div class="count-card"><div class="count-lbl">Outstanding tasks</div><div class="count-big">${outstanding}</div><div class="count-sub">${outstanding===0?'All caught up':'To complete'}</div></div>
+      <div class="count-card"><div class="count-lbl">Completed this week</div><div class="count-big">${doneThisWeek}</div><div class="count-sub">Keep it going</div></div>
+    </div>
+    ${upcoming7.length?`<div class="slbl">Next 7 days</div><div style="margin-bottom:26px">${upcoming7.slice(0,5).map(e=>evRowHTML(e,false)).join('')}</div>`:''}`;
   const nutriBlock=myPlan?.nutrition_notes
     ? `<div style="font-size:13px;color:var(--t2);line-height:1.7;white-space:pre-wrap">${escapeHtml(myPlan.nutrition_notes)}</div>`
     : MEALS.map(m=>`<div class="exr"><div><div class="exn">${m.n}</div><div class="exd">${m.f}</div></div><span style="font-family:'Bebas Neue';font-size:15px;color:var(--a)">${m.k}</span></div>`).join('');
@@ -1438,7 +1728,8 @@ function vTo(el){
     ? escapeHtml(myPlan.training_notes)
     : `Welcome to PRVN, ${name}! Your personalised plan is ready — follow the structure shown here.`;
   el.innerHTML=`
-    <div class="ph"><div><div class="pt">TODAY</div><div class="ps">${myPlan?.split||'Your training plan'}</div></div><button class="btn btn-g btn-sm" onclick="go('calendar')">${ico('cal',11)} View calendar</button></div>
+    <div class="ph"><div><div class="pt">TODAY</div><div class="ps">${myPlan?.split||'Your training plan'}</div></div><button class="btn btn-g btn-sm" onclick="go('schedule')">${ico('cal',11)} Full schedule</button></div>
+    ${schedBlock}
     <div class="mgrid">
       <div class="mb"><div class="mv" style="color:var(--a)">${kcal.toLocaleString()}</div><div class="ml">Kcal target</div></div>
       <div class="mb"><div class="mv">${prot}g</div><div class="ml">Protein</div></div>
@@ -1726,26 +2017,12 @@ async function intakeNext(){
 
 function vPr(el){
   el.innerHTML=`
-    <div class="ph"><div><div class="pt">PROGRESS</div><div class="ps">Your journey so far</div></div></div>
-    <div class="srow">
-      <div class="sc"><div class="sv">—</div><div class="sl">Weight change</div><div class="sd" style="color:var(--t3)">Log check-ins to track</div></div>
-      <div class="sc"><div class="sv">—</div><div class="sl">Bench PR</div></div>
-      <div class="sc"><div class="sv">—</div><div class="sl">Check-ins done</div></div>
-      <div class="sc"><div class="sv">0</div><div class="sl">Week streak</div></div>
-    </div>
+    <div class="ph"><div><div class="pt">PROGRESS</div><div class="ps">Your journey so far</div></div><button class="btn btn-p btn-sm" onclick="triggerPhotoUpload()">${ico('cam',11)} Add photo</button></div>
     <div class="slbl">Progress photos</div>
-    <div class="pstrip">
-      ${[{l:'Week 1',w:'—'},{l:'Week 4',w:'—'},{l:'Week 8',w:'—'}].map((ph,i)=>`
-        <div class="pe"><div class="pb" onclick="triggerUpload('mp-${i}')">
-          <div class="pb-emp">${ico('cam',22)}<p>${ph.l}</p></div>
-          <div class="pb-hov">Add photo</div>
-        </div>
-        <div class="pm"><div class="pw">${ph.l}</div><div class="pk">${ph.w}</div></div>
-        </div>`).join('')}
-      <div class="padd" onclick="triggerUpload('mp-new')">${ico('plus',20)}<p>New photo</p></div>
-    </div>
+    <div id="photo-strip" class="pstrip"><div class="pb skel" style="border:none"></div><div class="pb skel" style="border:none"></div></div>
     <div class="slbl">Check-in history</div>
     <div id="ci-history"><div class="loading"><span class="spinner"></span>Loading...</div></div>`;
+  loadProgressPhotos();
   fetchMyCheckIns().then(cis=>{
     const el2=document.getElementById('ci-history');if(!el2)return;
     if(cis.length===0){el2.innerHTML=`<div class="empty-state">${ico('trend',28)}<h3>No check-ins yet</h3><p>Submit your first check-in to start tracking progress.</p></div>`;return;}
@@ -1756,9 +2033,76 @@ function vPr(el){
         ${ci.energy_level?`<div class="ci-stat"><div class="v">${ci.energy_level}/10</div><div class="l">Energy</div></div>`:''}
         ${ci.sleep_score?`<div class="ci-stat"><div class="v">${ci.sleep_score}/10</div><div class="l">Sleep</div></div>`:''}
       </div>
-      ${ci.overall_feeling?`<div class="ci-note">"${ci.overall_feeling}"</div>`:''}
+      ${ci.overall_feeling?`<div class="ci-note">"${escapeHtml(ci.overall_feeling)}"</div>`:''}
     </div>`).join('');
   });
+}
+
+async function loadProgressPhotos(){
+  const strip=document.getElementById('photo-strip');if(!strip)return;
+  const{data:rows}=await db.from('progress_photos').select('*').eq('user_id',currentUser.id).order('taken_on',{ascending:true});
+  const photos=rows||[];
+  if(photos.length===0){
+    strip.innerHTML=`<div class="padd" onclick="triggerPhotoUpload()">${ico('plus',20)}<p>Add your first photo</p></div>`;
+    return;
+  }
+  // Create signed URLs for each private photo
+  const items=await Promise.all(photos.map(async p=>{
+    let url='';
+    try{const{data}=await db.storage.from('progress-photos').createSignedUrl(p.storage_path,3600);url=data?.signedUrl||'';}catch(e){}
+    return{...p,url};
+  }));
+  strip.innerHTML=items.map(p=>`
+    <div class="pe">
+      <div class="pb">
+        ${p.url?`<img src="${p.url}" alt="Progress ${p.taken_on}">`:`<div class="pb-emp">${ico('cam',22)}</div>`}
+        <div class="pb-hov" onclick="deleteProgressPhoto('${p.id}','${p.storage_path}')">Delete</div>
+      </div>
+      <div class="pm"><div class="pw">${new Date(p.taken_on+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'})}</div><div class="pk">${p.weight?p.weight+' kg':''}</div></div>
+    </div>`).join('')
+    +`<div class="padd" onclick="triggerPhotoUpload()">${ico('plus',20)}<p>New photo</p></div>`;
+}
+
+function triggerPhotoUpload(){
+  const inp=document.getElementById('file-in');
+  inp.onchange=handlePhotoUpload;
+  inp.click();
+}
+
+async function handlePhotoUpload(e){
+  const file=e.target.files[0];e.target.value='';
+  if(!file)return;
+  if(file.size>10*1024*1024){toast('Photo too large (max 10MB)');return;}
+  toast('Uploading photo...');
+  const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+  const path=`${currentUser.id}/${Date.now()}.${ext}`;
+  const{error:upErr}=await db.storage.from('progress-photos').upload(path,file,{upsert:false});
+  if(upErr){toast('Upload failed — try again');return;}
+  const{error:dbErr}=await db.from('progress_photos').insert({user_id:currentUser.id,storage_path:path,taken_on:new Date().toISOString().slice(0,10)});
+  if(dbErr){toast('Saved photo but metadata failed');}
+  else toast('Photo added ✓');
+  loadProgressPhotos();
+}
+
+async function deleteProgressPhoto(id,path){
+  await db.storage.from('progress-photos').remove([path]);
+  await db.from('progress_photos').delete().eq('id',id);
+  toast('Photo removed');
+  loadProgressPhotos();
+}
+
+async function loadCoachPhotos(clientId){
+  const strip=document.getElementById('coach-photos');if(!strip)return;
+  const{data:rows}=await db.from('progress_photos').select('*').eq('user_id',clientId).order('taken_on',{ascending:true});
+  const photos=rows||[];
+  if(photos.length===0){strip.innerHTML=`<div style="font-size:12px;color:var(--t3);padding:8px 0">No progress photos uploaded yet.</div>`;return;}
+  const items=await Promise.all(photos.map(async p=>{
+    let url='';try{const{data}=await db.storage.from('progress-photos').createSignedUrl(p.storage_path,3600);url=data?.signedUrl||'';}catch(e){}
+    return{...p,url};
+  }));
+  strip.innerHTML=items.map(p=>`
+    <div class="pe"><div class="pb">${p.url?`<img src="${p.url}" alt="Progress ${p.taken_on}">`:''}</div>
+    <div class="pm"><div class="pw">${new Date(p.taken_on+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'})}</div><div class="pk">${p.weight?p.weight+' kg':''}</div></div></div>`).join('');
 }
 
 let ciEnergy=null,ciNutr=null,ciSleep=null;
@@ -1841,17 +2185,11 @@ function vSub(el){
     </div>`;}
 
 // ── UPLOAD ──
-function triggerUpload(t){upT=t;document.getElementById('file-in').click();}
-function handleUpload(e){
-  const file=e.target.files[0];if(!file||!upT)return;
-  const reader=new FileReader();
-  reader.onload=ev=>{toast('Photo saved locally ✓ (cloud storage coming soon)');upT=null;};
-  reader.readAsDataURL(file);e.target.value='';}
-
 // ── MODAL ──
 function showModal(t,b,fn){document.getElementById('md-t').textContent=t;document.getElementById('md-b').textContent=b;document.getElementById('md-ok').onclick=()=>{fn();closeModal();};document.getElementById('mo').classList.add('show');}
 function closeModal(){document.getElementById('mo').classList.remove('show');}
 document.getElementById('mo').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+document.getElementById('evmo').addEventListener('click',e=>{if(e.target===e.currentTarget)closeEventModal();});
 
 // ── TOAST ──
 let ttimer;
