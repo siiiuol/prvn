@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>PRVN — Performance Coaching</title>
+<title>PRVN — Coaching door Louis</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -478,24 +478,24 @@ input[type=file]{display:none}
 <!-- AUTH SCREEN -->
 <div class="auth-screen" id="auth-screen">
   <div class="auth-logo">PRVN<div class="auth-dot"></div></div>
-  <div class="auth-sub">Performance Coaching Platform</div>
+  <div class="auth-sub">Log in op je coaching</div>
   <div class="auth-card">
     <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="showTab('login')">Sign in</button>
-      <button class="auth-tab" id="tab-signup" onclick="showTab('signup')">Create account</button>
+      <button class="auth-tab active" id="tab-login" onclick="showTab('login')">Inloggen</button>
+      <button class="auth-tab" id="tab-signup" onclick="showTab('signup')">Account aanmaken</button>
     </div>
 
     <!-- LOGIN FORM -->
     <div id="form-login">
       <div class="auth-field">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <input class="auth-input" id="lg-email" type="email" placeholder="Email address" autocomplete="email">
+        <input class="auth-input" id="lg-email" type="email" placeholder="E-mailadres" autocomplete="email">
       </div>
       <div class="auth-field">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <input class="auth-input" id="lg-pw" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+        <input class="auth-input" id="lg-pw" type="password" placeholder="Wachtwoord" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
       </div>
-      <button class="auth-btn" id="lg-btn" onclick="doLogin()">Sign in</button>
+      <button class="auth-btn" id="lg-btn" onclick="doLogin()">Inloggen</button>
       <div class="auth-err" id="lg-err"></div>
     </div>
 
@@ -503,21 +503,21 @@ input[type=file]{display:none}
     <div id="form-signup" style="display:none">
       <div class="auth-field">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-        <input class="auth-input" id="sg-code" type="text" placeholder="Invite code" style="text-transform:uppercase" autocapitalize="characters">
+        <input class="auth-input" id="sg-code" type="text" placeholder="Uitnodigingscode" style="text-transform:uppercase" autocapitalize="characters">
       </div>
       <div class="auth-field">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <input class="auth-input" id="sg-name" type="text" placeholder="Full name">
+        <input class="auth-input" id="sg-name" type="text" placeholder="Volledige naam">
       </div>
       <div class="auth-field">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <input class="auth-input" id="sg-email" type="email" placeholder="Email address">
+        <input class="auth-input" id="sg-email" type="email" placeholder="E-mailadres">
       </div>
       <div class="auth-field">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <input class="auth-input" id="sg-pw" type="password" placeholder="Password (min 6 characters)" onkeydown="if(event.key==='Enter')doSignUp()">
+        <input class="auth-input" id="sg-pw" type="password" placeholder="Wachtwoord (min. 6 tekens)" onkeydown="if(event.key==='Enter')doSignUp()">
       </div>
-      <button class="auth-btn" id="sg-btn" onclick="doSignUp()">Create free account</button>
+      <button class="auth-btn" id="sg-btn" onclick="doSignUp()">Account aanmaken</button>
       <div class="auth-err" id="sg-err"></div>
     </div>
   </div>
@@ -526,25 +526,25 @@ input[type=file]{display:none}
 <!-- INTAKE WIZARD -->
 <div class="auth-screen" id="intake-screen" style="display:none">
   <div class="auth-logo">PRVN<div class="auth-dot"></div></div>
-  <div class="auth-sub">Client Intake</div>
+  <div class="auth-sub">Intake</div>
   <div id="intake-card" style="width:460px;max-width:92vw"></div>
 </div>
 
 <!-- PENDING APPROVAL -->
 <div class="auth-screen" id="pending-screen" style="display:none">
   <div class="auth-logo">PRVN<div class="auth-dot"></div></div>
-  <div class="auth-sub">Client Intake</div>
+  <div class="auth-sub">Intake</div>
   <div style="width:380px;max-width:90vw;text-align:center">
     <div class="card" style="padding:28px 24px">
       <div style="width:52px;height:52px;border-radius:50%;background:var(--ad);border:1px solid var(--ad2);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--a)">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       </div>
-      <div style="font-family:'Bebas Neue';font-size:24px;letter-spacing:.08em;margin-bottom:8px">PLAN PENDING</div>
-      <div style="font-size:13px;color:var(--t2);line-height:1.7">Thanks for completing your intake. Your coach is reviewing your answers and building your plan — you'll get access to your dashboard as soon as it's approved.</div>
+      <div style="font-family:'Bebas Neue';font-size:24px;letter-spacing:.08em;margin-bottom:8px">PLAN IN BEHANDELING</div>
+      <div style="font-size:13px;color:var(--t2);line-height:1.7">Bedankt voor je intake. Ik bekijk je antwoorden en bouw je plan — zodra het klaar is krijg je toegang tot je dashboard.</div>
     </div>
     <div style="display:flex;gap:8px;justify-content:center;margin-top:16px">
-      <button class="btn btn-p btn-sm" onclick="checkPendingStatus(true)">Check status</button>
-      <button class="btn btn-g btn-sm" onclick="logout()">Sign out</button>
+      <button class="btn btn-p btn-sm" onclick="checkPendingStatus(true)">Status controleren</button>
+      <button class="btn btn-g btn-sm" onclick="logout()">Uitloggen</button>
     </div>
   </div>
 </div>
@@ -559,7 +559,7 @@ input[type=file]{display:none}
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
     </div>
     <div class="nav-av" id="nav-av">JV</div>
-    <button class="nav-out" onclick="logout()">Sign out</button>
+    <button class="nav-out" onclick="logout()">Uitloggen</button>
   </div>
 </div>
 
@@ -576,8 +576,8 @@ input[type=file]{display:none}
       <div id="reveal-ring">
         <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
       </div>
-      <div id="reveal-kicker">Your coach has been working</div>
-      <div id="reveal-title">Your new coaching<br>plan has arrived</div>
+      <div id="reveal-kicker">Je plan is klaar</div>
+      <div id="reveal-title">Hey — je coaching<br>plan staat voor je klaar</div>
     </div>
     <div id="reveal-plan"></div>
   </div>
@@ -639,11 +639,11 @@ async function checkPendingStatus(manual){
     if(intake&&intake.status==='approved'){
       clearInterval(pendingTimer);
       showApp('client');
-      toast('Your plan is live — welcome to PRVN');
+      toast('Je plan staat klaar');
     }else if(manual){
-      toast('Still pending — your coach is reviewing');
+      toast('Nog in behandeling — ik bekijk je intake');
     }
-  }catch(e){if(manual)toast('Could not check — try again');}
+  }catch(e){if(manual)toast('Kon niet controleren — probeer opnieuw');}
 }
 
 function countUp(el,target,dur){
@@ -687,7 +687,7 @@ function playPlanReveal(){
         ${p.volume?`<div class="rv-line"><span class="k">Focus</span><span class="v">${escapeHtml(p.volume)}</span></div>`:''}
       </div>
       ${p.training_notes?`<div class="rv-card" data-i="2"><div class="rv-h">A note from your coach</div><div class="rv-note">${escapeHtml(p.training_notes)}</div></div>`:''}
-      <button id="reveal-start" onclick="closePlanReveal()">Start my journey</button>`;
+      <button id="reveal-start" onclick="closePlanReveal()">Aan de slag</button>`;
     planBox.classList.add('show');
 
     // Stagger the cards in
@@ -801,12 +801,12 @@ async function doSignUp(){
   btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Checking invite code...';
   const{data:codeValid,error:codeErr}=await db.rpc('validate_invite_code',{p_code:code});
   if(codeErr||!codeValid){
-    btn.disabled=false;btn.innerHTML='Create free account';
+    btn.disabled=false;btn.innerHTML='Account aanmaken';
     errEl.textContent='That invite code is invalid or already used.';errEl.className='auth-err error';return;
   }
   btn.innerHTML='<span class="spinner"></span>Creating account...';
   const{data,error}=await db.auth.signUp({email,password:pw,options:{data:{full_name:name,role:'client',invite_code:code}}});
-  btn.disabled=false;btn.innerHTML='Create free account';
+  btn.disabled=false;btn.innerHTML='Account aanmaken';
   if(error){errEl.textContent=error.message;errEl.className='auth-err error';return;}
   if(data.session){
     db.rpc('consume_invite_code',{p_code:code}).catch(()=>{});
@@ -825,7 +825,7 @@ async function doLogin(){
   if(!email||!pw){errEl.textContent='Please enter email and password.';errEl.className='auth-err error';return;}
   btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Signing in...';
   const{error}=await db.auth.signInWithPassword({email,password:pw});
-  btn.disabled=false;btn.innerHTML='Sign in';
+  btn.disabled=false;btn.innerHTML='Inloggen';
   if(error){errEl.textContent=error.message;errEl.className='auth-err error';return;}
 }
 
@@ -983,7 +983,7 @@ async function vOv(el){
   await fetchRealClients();
   const totalRev=realClients.filter(c=>c.subscriptions?.[0]?.price>0).reduce((a,c)=>a+(c.subscriptions?.[0]?.price||0),0);
   el.innerHTML=`
-    <div class="ph"><div><div class="pt">OVERVIEW</div><div class="ps">Welcome back, ${currentProfile?.full_name?.split(' ')[0]||'Coach'}</div></div><button class="btn btn-p" onclick="go('clients')">${ico('plus')} New client</button></div>
+    <div class="ph"><div><div class="pt">OVERVIEW</div><div class="ps">Welkom terug, ${currentProfile?.full_name?.split(' ')[0]||'Coach'}</div></div><button class="btn btn-p" onclick="go('clients')">${ico('plus')} New client</button></div>
     <div class="srow">
       <div class="sc"><div class="sv">€${totalRev||0}</div><div class="sl">Revenue / month</div><div class="sd dup">↑ Growing</div></div>
       <div class="sc"><div class="sv">${realClients.length}</div><div class="sl">Active clients</div><div class="sd ${realClients.length>0?'dup':''}">↑ ${realClients.length} total</div></div>
@@ -1345,7 +1345,7 @@ async function vSchedule(el){
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px">
       ${cats.map(c=>`<button class="cal-tg ${evFilter===c?'on':''}" style="border:1px solid var(--b2);border-radius:7px" onclick="evFilter='${c}';vSchedule(document.getElementById('v-schedule'))">${c==='all'?'All':EV_CAT_LABEL[c]}</button>`).join('')}
     </div>
-    ${myEvents.length===0?`<div class="empty-state">${ico('cal',28)}<h3>Nothing scheduled yet</h3><p>Your coach will add check-ins, calls, and reminders here.</p></div>`:''}
+    ${myEvents.length===0?`<div class="empty-state">${ico('cal',28)}<h3>Nog niets ingepland</h3><p>Ik voeg hier check-ins, calls en herinneringen toe.</p></div>`:''}
     ${upcoming.length?`<div class="slbl">Upcoming</div><div style="margin-bottom:18px">${upcoming.map(e=>evRowHTML(e,false)).join('')}</div>`:''}
     ${missed.length?`<div class="slbl">Missed</div><div style="margin-bottom:18px">${missed.map(e=>evRowHTML(e,false)).join('')}</div>`:''}
     ${done.length?`<div class="slbl">Completed</div>${done.map(e=>evRowHTML(e,false)).join('')}`:''}`;
@@ -1726,7 +1726,7 @@ async function vTo(el){
     : MEALS.map(m=>`<div class="exr"><div><div class="exn">${m.n}</div><div class="exd">${m.f}</div></div><span style="font-family:'Bebas Neue';font-size:15px;color:var(--a)">${m.k}</span></div>`).join('');
   const coachNote=myPlan?.training_notes
     ? escapeHtml(myPlan.training_notes)
-    : `Welcome to PRVN, ${name}! Your personalised plan is ready — follow the structure shown here.`;
+    : `Hey ${name}, je plan is klaar — volg de structuur hieronder.`;
   el.innerHTML=`
     <div class="ph"><div><div class="pt">TODAY</div><div class="ps">${myPlan?.split||'Your training plan'}</div></div><button class="btn btn-g btn-sm" onclick="go('schedule')">${ico('cal',11)} Full schedule</button></div>
     ${schedBlock}
@@ -1801,7 +1801,7 @@ function vCal(el){
         <button class="cal-tg ${calMode==='month'?'on':''}" onclick="calMode='month';go('calendar')">Month</button>
       </div>
     </div>`;
-  if(!need){el.innerHTML=header+`<div class="empty-state">${ico('cal',28)}<h3>No plan scheduled yet</h3><p>Your coach will set your training days. Once your plan is active, your week appears here.</p></div>`;return;}
+  if(!need){el.innerHTML=header+`<div class="empty-state">${ico('cal',28)}<h3>Nog geen schema</h3><p>Zodra je plan actief is, verschijnt je week hier.</p></div>`;return;}
   el.innerHTML=header+(calMode==='week'?calWeek(trainSet,need):calMonth(trainSet));
 }
 
@@ -2144,7 +2144,7 @@ async function submitCheckIn(){
 function vHb(el){
   const hs=[{n:'Sleep 7h+',s:'Consistent bed time',k:'sleep'},{n:'Hit protein target',s:'176g today',k:'prot'},{n:'10,000 steps',s:'Move outside the gym',k:'steps'},{n:'No alcohol',s:'Impacts recovery heavily',k:'alc'},{n:'Morning routine',s:'Consistency builds momentum',k:'routine'}];
   el.innerHTML=`
-    <div class="ph"><div><div class="pt">HABITS</div><div class="ps">Small things compound</div></div></div>
+    <div class="ph"><div><div class="pt">HABITS</div><div class="ps">Kleine gewoontes tellen op</div></div></div>
     <div class="card" style="margin-bottom:12px"><div class="ch">This week</div>
       <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
         ${DAYS.map((d,i)=>`<div style="text-align:center"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:6px">${d[0]}</div><div style="aspect-ratio:1;border-radius:5px;background:${hlog[i]>=3?'var(--a)':hlog[i]>0?'var(--od)':'var(--s3)'};border:1px solid ${hlog[i]>=3?'var(--a)':hlog[i]>0?'var(--o)':'var(--b1)'};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:${hlog[i]>=3?'var(--bg)':hlog[i]>0?'var(--o)':'var(--t3)'};cursor:pointer" onclick="hlog[${i}]=(hlog[${i}]+1)%4;vHb(document.getElementById('v-habits'))">${hlog[i]||''}</div></div>`).join('')}
@@ -2153,15 +2153,15 @@ function vHb(el){
     <div class="card">
       <div class="ch">Today</div>
       ${hs.map(h=>`<div class="hbr"><div><div class="hbn">${h.n}</div><div class="hbs">${h.s}</div></div><button class="htg ${habs[h.k]?'on':''}" onclick="habs['${h.k}']=!habs['${h.k}'];this.classList.toggle('on')"></button></div>`).join('')}
-      <button class="btn btn-p" style="width:100%;margin-top:14px;justify-content:center" onclick="toast('Habits saved')">Save</button>
+      <button class="btn btn-p" style="width:100%;margin-top:14px;justify-content:center" onclick="toast('Gewoontes opgeslagen')">Opslaan</button>
     </div>`;}
 
 async function vMM(el){
-  el.innerHTML=`<div class="ph"><div><div class="pt">MESSAGES</div><div class="ps">Your coach</div></div></div><div style="height:500px;display:flex" id="mm-chat"></div>`;
+  el.innerHTML=`<div class="ph"><div><div class="pt">MESSAGES</div><div class="ps">Je coach</div></div></div><div style="height:500px;display:flex" id="mm-chat"></div>`;
   const container=document.getElementById('mm-chat');
   const coachId=await getCoachId();
   if(!coachId){
-    container.innerHTML=`<div class="empty-state" style="flex:1">${ico('msg',28)}<h3>No coach found</h3><p>Your coach will appear here once connected.</p></div>`;
+    container.innerHTML=`<div class="empty-state" style="flex:1">${ico('msg',28)}<h3>Geen coach gevonden</h3><p>Je coach verschijnt hier zodra je verbonden bent.</p></div>`;
     return;
   }
   buildChat(container,coachId,coachProfile?.full_name||'Coach',true);
